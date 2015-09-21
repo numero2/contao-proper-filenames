@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<xliff version="1.1">
+<file datatype="php" original="system/modules/proper-filenames/languages/de/tl_settings.php" source-language="en">
+<body>
+    <trans-unit id="tl_settings.checkFilenames.0">
+        <source>Check filenames</source>
+        <target>Dateinamen auf Sonderzeichen prüfen</target>
+    </trans-unit>
+    <trans-unit id="tl_settings.checkFilenames.1">
+        <source>Checks filenames after uploading and replaces any forbidden special characters</source>
+        <target>Überprüft Dateinamen nach dem hochladen und ersetzt ggf. unerlaubte Sonderzeichen.</target>
+    </trans-unit>
+</body>
+</file>
+</xliff>

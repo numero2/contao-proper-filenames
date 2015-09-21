@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<xliff version="1.1">
+<file datatype="php" original="system/modules/proper-filenames/languages/en/tl_settings.php" source-language="en">
+<body>
+    <trans-unit id="tl_settings.checkFilenames.0">
+        <source>Check filenames</source>
+    </trans-unit>
+    <trans-unit id="tl_settings.checkFilenames.1">
+        <source>Checks filenames after uploading and replaces any forbidden special characters</source>
+    </trans-unit>
+</body>
+</file>
+</xliff>
