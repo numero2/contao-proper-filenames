@@ -30,11 +30,21 @@ class CheckFilenames extends \Frontend {
             return null;
 
         $this->Import( 'Files' );
+        $this->Import( 'FilesModel' );
 
         if( !empty($arrFiles) ) {
+
             foreach( $arrFiles as $file ) {
+
+                // rename physical file
                 $newFile = $this->replaceForbiddenCharacters( $file );
                 $this->Files->rename( $file, $newFile );
+
+                // rename file in database
+                $objFile = \FilesModel::findByPath($file);
+                $objFile->path = $newFile;
+                $objFile->hash = md5_file(TL_ROOT . '/' . $newFile);
+                $objFile->save();
             }
         }
     }
