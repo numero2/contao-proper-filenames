@@ -12,12 +12,6 @@
  */
 
 
-/**
- * Namespace
- */
-namespace numero2\ProperFilenames;
-
-
 /* Fields */
 $GLOBALS['TL_DCA']['tl_files']['fields']['name']['save_callback'][] = array('\numero2\ProperFilenames\tl_proper_filenames','rename');
 
