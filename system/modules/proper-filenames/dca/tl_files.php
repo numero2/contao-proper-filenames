@@ -13,7 +13,7 @@
 
 
 /* Fields */
-$GLOBALS['TL_DCA']['tl_files']['fields']['name']['save_callback'][] = array('\numero2\ProperFilenames\tl_proper_filenames','rename');
+$GLOBALS['TL_DCA']['tl_files']['fields']['name']['save_callback'][] = array('tl_proper_filenames','rename');
 
 
 /* Class */
