@@ -24,6 +24,13 @@ class CheckFilenames extends \Frontend {
     protected $search = '';
 
 
+    /**
+     * Renames the given files
+     *
+     * @param array $arrFiles
+     *
+     * @return none
+     */
     public function renameFiles( $arrFiles ) {
 
         if( !$GLOBALS['TL_CONFIG']['checkFilenames'] )
@@ -38,7 +45,10 @@ class CheckFilenames extends \Frontend {
 
                 // rename physical file
                 $newFile = $this->replaceForbiddenCharacters( $file );
-                $this->Files->rename( $file, $newFile );
+
+                // because the \Files renaming function is doing
+                $this->Files->rename( $file, $newFile.'.tmp' );
+                $this->Files->rename( $newFile.'.tmp', $newFile );
 
                 // rename file in database
                 $objFile = \FilesModel::findByPath($file);
@@ -50,6 +60,13 @@ class CheckFilenames extends \Frontend {
     }
 
 
+    /**
+     * Replaces all "forbidden" characters in the given filename
+     *
+     * @param string $strFile
+     *
+     * @return string
+     */
     protected function replaceForbiddenCharacters( $strFile ) {
 
         $info = pathinfo( $strFile );
@@ -62,11 +79,18 @@ class CheckFilenames extends \Frontend {
     }
 
 
-    protected function replaceUnderscores( $strFilename ) {
+    /**
+     * Replaces doubled underscores in the given filename
+     *
+     * @param string $strFile
+     *
+     * @return string
+     */
+    protected function replaceUnderscores( $strFile ) {
 
-        $newFilename = str_replace( "__", "_", $strFilename );
+        $newFilename = str_replace( "__", "_", $strFile );
 
-        if( $newFilename != $strFilename ) {
+        if( $newFilename != $strFile ) {
             $newFilename = $this->replaceUnderscores( $newFilename );
         }
 
