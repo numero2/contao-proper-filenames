@@ -33,7 +33,7 @@ class CheckFilenames extends \Frontend {
      */
     public function renameFiles( $arrFiles ) {
 
-        if( !$GLOBALS['TL_CONFIG']['checkFilenames'] )
+        if( !\Config::get('checkFilenames') )
             return null;
 
         $this->Import( 'Files' );
@@ -71,7 +71,12 @@ class CheckFilenames extends \Frontend {
 
         $info = pathinfo( $strFile );
 
-        $newFilename = substr( $info['filename'], 0, 32 );
+        $newFilename = $info['filename'];
+
+        if( !\Config::get('doNotTrimFilenames') ) {
+            $newFilename = substr( $newFilename, 0, 32 );
+        }
+
         $newFilename = standardize( \String::restoreBasicEntities( $newFilename ) );
         $newFilename = $this->replaceUnderscores( $newFilename );
 

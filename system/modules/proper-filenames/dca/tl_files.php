@@ -22,7 +22,7 @@ class tl_proper_filenames extends \Backend {
 
     public function rename($varValue) {
 
-        if( !$GLOBALS['TL_CONFIG']['checkFilenames'] )
+        if( !\Config::get('checkFilenames') )
             return $varValue;
 
         $varValue = standardize( \String::restoreBasicEntities( $varValue ) );

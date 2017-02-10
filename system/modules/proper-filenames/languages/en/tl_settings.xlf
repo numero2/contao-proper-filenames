@@ -8,6 +8,14 @@
     <trans-unit id="tl_settings.checkFilenames.1">
         <source>Checks filenames after uploading and replaces any forbidden special characters</source>
     </trans-unit>
+    <trans-unit id="tl_settings.doNotTrimFilenames.0">
+        <source>Do not trim filenames</source>
+        <target>Do not trim filenames</target>
+    </trans-unit>
+    <trans-unit id="tl_settings.doNotTrimFilenames.1">
+        <source>By default all renamed files with be trimmed to 32 characters.</source>
+        <target>By default all renamed files with be trimmed to 32 characters.</target>
+    </trans-unit>
 </body>
 </file>
 </xliff>

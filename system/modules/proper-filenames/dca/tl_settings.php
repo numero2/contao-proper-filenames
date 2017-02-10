@@ -15,7 +15,7 @@
 /* Palettes */
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = str_replace(
     'imageHeight;',
-    'imageHeight,checkFilenames;',
+    'imageHeight,checkFilenames,doNotTrimFilenames;',
     $GLOBALS['TL_DCA']['tl_settings']['palettes']['default']
 );
 
@@ -26,4 +26,10 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['checkFilenames'] = array(
     'inputType' => 'checkbox',
     'eval'      => array( 'tl_class' => 'w50 cbx' ),
     'default'   => true
+);
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['doNotTrimFilenames'] = array(
+    'label'     => &$GLOBALS['TL_LANG']['tl_settings']['doNotTrimFilenames'],
+    'inputType' => 'checkbox',
+    'eval'      => array( 'tl_class' => 'w50 cbx' ),
 );

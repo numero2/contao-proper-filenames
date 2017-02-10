@@ -10,6 +10,14 @@
         <source>Checks filenames after uploading and replaces any forbidden special characters</source>
         <target>Überprüft Dateinamen nach dem hochladen und ersetzt ggf. unerlaubte Sonderzeichen.</target>
     </trans-unit>
+    <trans-unit id="tl_settings.doNotTrimFilenames.0">
+        <source>Do not trim filenames</source>
+        <target>Dateinamen nicht kürzen</target>
+    </trans-unit>
+    <trans-unit id="tl_settings.doNotTrimFilenames.1">
+        <source>By default all renamed files with be trimmed to 32 characters.</source>
+        <target>Dateinamen werden standardmässig nach 32 Zeichen abgeschnitten.</target>
+    </trans-unit>
 </body>
 </file>
 </xliff>
