@@ -3,12 +3,12 @@
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2015 Leo Feyer
+ * Copyright (c) 2005-2017 Leo Feyer
  *
  * @package   ProperFilenames
  * @author    Benny Born <benny.born@numero2.de>
  * @license   LGPL
- * @copyright 2015 numero2 - Agentur für Internetdienstleistungen
+ * @copyright 2017 numero2 - Agentur für Internetdienstleistungen
  */
 
 
@@ -19,9 +19,6 @@ namespace numero2\ProperFilenames;
 
 
 class CheckFilenames extends \Frontend {
-
-
-    protected $search = '';
 
 
     /**
@@ -44,9 +41,11 @@ class CheckFilenames extends \Frontend {
             foreach( $arrFiles as $file ) {
 
                 // rename physical file
-                $newFile = $this->replaceForbiddenCharacters( $file );
+                $info = pathinfo( $file );
+                $newFile = self::sanitizeFileOrFolderName($info['filename']);
+                $newFile = $info['dirname'] . '/' . $newFile . '.' . strtolower( $info['extension'] );
 
-                // because the \Files renaming function is doing
+                // create a temp file because the \Files class can't handle proper renaming on windows
                 $this->Files->rename( $file, $newFile.'.tmp' );
                 $this->Files->rename( $newFile.'.tmp', $newFile );
 
@@ -61,26 +60,36 @@ class CheckFilenames extends \Frontend {
 
 
     /**
-     * Replaces all "forbidden" characters in the given filename
+     * Sanitizes the given file- or foldername
      *
-     * @param string $strFile
+     * @param  string $strName
      *
      * @return string
      */
-    protected function replaceForbiddenCharacters( $strFile ) {
+    public static function sanitizeFileOrFolderName( $strName ) {
 
-        $info = pathinfo( $strFile );
+        if( !\Config::get('checkFilenames') )
+            return $strName;
 
-        $newFilename = $info['filename'];
+        $newName = $strName;
 
+        // cut name to length
         if( !\Config::get('doNotTrimFilenames') ) {
-            $newFilename = substr( $newFilename, 0, 32 );
+            $newName = substr( $newName, 0, 32 );
         }
 
-        $newFilename = standardize( \String::restoreBasicEntities( $newFilename ) );
-        $newFilename = $this->replaceUnderscores( $newFilename );
+        // remove forbidden characters
+        $newName = standardize( \String::restoreBasicEntities($newName) );
 
-        return $info['dirname'] . '/' . $newFilename . '.' . strtolower( $info['extension'] );
+        // remove 'id-' from the beginning
+        if( substr($newName,0,3) === "id-" ) {
+            $newName = substr($newName,3);
+        }
+
+        // replace double underscores
+        $newName = self::replaceUnderscores($newName);
+
+        return $newName;
     }
 
 
@@ -91,7 +100,7 @@ class CheckFilenames extends \Frontend {
      *
      * @return string
      */
-    protected function replaceUnderscores( $strFile ) {
+    protected static function replaceUnderscores( $strFile ) {
 
         $newFilename = str_replace( "__", "_", $strFile );
 
