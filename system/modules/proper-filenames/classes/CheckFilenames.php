@@ -79,7 +79,7 @@ class CheckFilenames extends \Frontend {
         }
 
         // remove forbidden characters
-        $newName = standardize( \String::restoreBasicEntities($newName) );
+        $newName = standardize( \StringUtil::restoreBasicEntities($newName) );
 
         // remove 'id-' from the beginning
         if( substr($newName,0,3) === "id-" ) {
