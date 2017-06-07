@@ -12,5 +12,7 @@
  */
 
 
-/* Fields */
-$GLOBALS['TL_DCA']['tl_files']['fields']['name']['save_callback'][] = array('\numero2\ProperFilenames\CheckFilenames','sanitizeFileOrFolderName');
+/**
+ * Hooks
+ */
+$GLOBALS['TL_HOOKS']['postUpload'][] = array( '\numero2\ProperFilenames\CheckFilenames', 'renameFiles' );

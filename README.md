@@ -1,20 +1,25 @@
-contao-proper-filenames
-======================
+Contao Proper Filenames
+=======================
 
 About
------
+--
+Santizes the filenames of files uploaded via the Contao File manager.
 
-Replaces special characters in filenames right after upload.
+System requirements
+--
 
-
-Installation
------------
-
-* Copy `system` folder into Contao installation
-* Click `Check filenames` in global Contao settings
+* [Contao](https://github.com/contao/core) 3.2.5 or newer  / successfully tested with Contao 4.3.9
 
 
-Dependencies
--------------------
+Installation & Configuration
+--
 
-* [Contao](https://github.com/contao/core) 3.0 or higher
+* Create a folder named `proper-filenames` in `system/modules`
+* Clone this repository into the new folder
+* In the Backend go to System Settings and click `Check filenames` under `Upload settings`
+
+**Additional step for Contao 4.X:**
+Open `app/AppKernel.php` and add the following line to the $bundles array
+```php
+new Contao\CoreBundle\HttpKernel\Bundle\ContaoModuleBundle('proper-filenames', $this->getRootDir())
+```

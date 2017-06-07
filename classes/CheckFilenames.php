@@ -40,20 +40,34 @@ class CheckFilenames extends \Frontend {
 
             foreach( $arrFiles as $file ) {
 
-                // rename physical file
                 $info = pathinfo( $file );
-                $newFile = self::sanitizeFileOrFolderName($info['filename']);
-                $newFile = $info['dirname'] . '/' . $newFile . '.' . strtolower( $info['extension'] );
 
-                // create a temp file because the \Files class can't handle proper renaming on windows
-                $this->Files->rename( $file, $newFile.'.tmp' );
-                $this->Files->rename( $newFile.'.tmp', $newFile );
+                $oldFileName = $info['filename'] . '.' . strtolower( $info['extension'] );
+                $newFileName = self::sanitizeFileOrFolderName($info['filename']) . '.' . strtolower( $info['extension'] );
 
-                // rename file in database
-                $objFile = \FilesModel::findByPath($file);
-                $objFile->path = $newFile;
-                $objFile->hash = md5_file(TL_ROOT . '/' . $newFile);
-                $objFile->save();
+                // rename physical file
+                if( $oldFileName !== $newFileName ) {
+
+                    $newFile = $info['dirname'] . '/' . $newFileName;
+
+                    // create a temp file because the \Files class can't handle proper renaming on windows
+                    $this->Files->rename( $file, $newFile.'.tmp' );
+                    $this->Files->rename( $newFile.'.tmp', $newFile );
+
+                    // rename file in database
+                    $objFile = \FilesModel::findByPath($file);
+                    $objFile->path = $newFile;
+                    $objFile->hash = md5_file(TL_ROOT . '/' . $newFile);
+
+                    if( $objFile->save() ) {
+
+                        \Message::addInfo(sprintf(
+                            $GLOBALS['TL_LANG']['MSC']['proper_filenames_renamed']
+                        ,   $oldFileName
+                        ,   $newFileName
+                        ));
+                    }
+                }
             }
         }
     }

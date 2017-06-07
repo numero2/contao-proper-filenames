@@ -3,24 +3,28 @@
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2015 Leo Feyer
+ * Copyright (c) 2005-2017 Leo Feyer
  *
  * @package   ProperFilenames
  * @author    Benny Born <benny.born@numero2.de>
  * @license   LGPL
- * @copyright 2015 numero2 - Agentur für Internetdienstleistungen
+ * @copyright 2017 numero2 - Agentur für Internetdienstleistungen
  */
 
 
-/* Palettes */
+/**
+ * Add palettes to tl_settings
+ */
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = str_replace(
-    'imageHeight;',
-    'imageHeight,checkFilenames,doNotTrimFilenames;',
+    ',imageHeight',
+    ',imageHeight,checkFilenames,doNotTrimFilenames',
     $GLOBALS['TL_DCA']['tl_settings']['palettes']['default']
 );
 
 
-/* Fields */
+/**
+ * Add fields to tl_settings
+ */
 $GLOBALS['TL_DCA']['tl_settings']['fields']['checkFilenames'] = array(
     'label'     => &$GLOBALS['TL_LANG']['tl_settings']['checkFilenames'],
     'inputType' => 'checkbox',
