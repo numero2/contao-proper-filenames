@@ -1,0 +1,21 @@
+{
+    "name": "numero2/contao-proper-filenames",
+    "type": "contao-module",
+    "license": "LGPL-3.0+",
+    "authors": [{
+            "name": "numero2 - Agentur für Internetdienstleistungen",
+            "homepage": "http://www.numero2.de"
+        }
+    ],
+    "require": {
+        "contao/core-bundle": "4.*",
+        "contao-community-alliance/composer-plugin": "3.*"
+    },
+    "extra": {
+        "contao": {
+            "sources": {
+                "": "system/modules/proper-filenames"
+            }
+        }
+    }
+}
