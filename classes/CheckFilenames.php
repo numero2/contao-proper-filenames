@@ -58,6 +58,7 @@ class CheckFilenames extends \Frontend {
                     $objFile = \FilesModel::findByPath($file);
                     $objFile->path = $newFile;
                     $objFile->hash = md5_file(TL_ROOT . '/' . $newFile);
+                    $objFile->name = $newFileName;
 
                     if( $objFile->save() ) {
 
