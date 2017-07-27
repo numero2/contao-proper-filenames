@@ -120,7 +120,7 @@ class CheckFilenames extends \Frontend {
         $newFilename = str_replace( "__", "_", $strFile );
 
         if( $newFilename != $strFile ) {
-            $newFilename = $this->replaceUnderscores( $newFilename );
+            $newFilename = self::replaceUnderscores( $newFilename );
         }
 
         return $newFilename;
