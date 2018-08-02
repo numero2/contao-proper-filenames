@@ -94,6 +94,7 @@ class CheckFilenames extends \Frontend {
         }
 
         // remove forbidden characters
+        $newName = preg_replace("/[\W_]+/", '', $newName);
         $newName = standardize( \StringUtil::restoreBasicEntities($newName) );
 
         // remove 'id-' from the beginning
