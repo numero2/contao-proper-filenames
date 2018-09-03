@@ -88,13 +88,11 @@ class CheckFilenames extends \Frontend {
 
         $newName = $strName;
 
-        // cut name to length
-        if( !\Config::get('doNotTrimFilenames') ) {
-            $newName = substr( $newName, 0, 32 );
-        }
+        // convert to lowercase
+        $newName = strtolower($newName);
 
         // remove forbidden characters
-        $newName = preg_replace("/[\W_]+/", '', $newName);
+        $newName = preg_replace("/[^a-z0-9-_]+/", '', $newName);
         $newName = standardize( \StringUtil::restoreBasicEntities($newName) );
 
         // remove 'id-' from the beginning
@@ -104,6 +102,11 @@ class CheckFilenames extends \Frontend {
 
         // replace double underscores
         $newName = self::replaceUnderscores($newName);
+
+        // cut name to length
+        if( !\Config::get('doNotTrimFilenames') ) {
+            $newName = substr( $newName, 0, 32 );
+        }
 
         return $newName;
     }
