@@ -92,6 +92,7 @@ class CheckFilenames extends \Frontend {
         $newName = strtolower($newName);
 
         // remove forbidden characters
+        $newName = preg_replace("/[\s]+/", '-', $newName);
         $newName = preg_replace("/[^a-z0-9-_]+/", '', $newName);
         $newName = standardize( \StringUtil::restoreBasicEntities($newName) );
 
