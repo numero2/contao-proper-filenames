@@ -17,6 +17,9 @@
  */
 namespace numero2\ProperFilenames;
 
+use Ausi\SlugGenerator\SlugGenerator;
+use Contao\CoreBundle\Slug\ValidCharacters;
+use Contao\System;
 
 class CheckFilenames extends \Frontend {
 
@@ -88,18 +91,8 @@ class CheckFilenames extends \Frontend {
 
         $newName = $strName;
 
-        // convert to lowercase
-        $newName = strtolower($newName);
-
         // remove forbidden characters
-        $newName = preg_replace("/[\s]+/", '-', $newName);
-        $newName = preg_replace("/[^a-z0-9-_]+/", '', $newName);
-        $newName = standardize( \StringUtil::restoreBasicEntities($newName) );
-
-        // remove 'id-' from the beginning
-        if( substr($newName,0,3) === "id-" ) {
-            $newName = substr($newName,3);
-        }
+        $newName = (new SlugGenerator(self::getSlugOptions()))->generate($newName);
 
         // replace double underscores
         $newName = self::replaceUnderscores($newName);
@@ -110,6 +103,26 @@ class CheckFilenames extends \Frontend {
         }
 
         return $newName;
+    }
+
+
+    /**
+     * Provides the options for tl_settings.filenameValidCharacters
+     *
+     * @return array
+     */
+    public function getValidCharacterOptions() {
+
+        if( class_exists(ValidCharacters::class) ) {
+            return System::getContainer()->get('contao.slug.valid_characters')->getOptions();
+        }
+
+        return array(
+            '\pN\p{Ll}' => 'unicodeLowercase',
+            '\pN\pL' => 'unicode',
+            '0-9a-z' => 'asciiLowercase',
+            '0-9a-zA-Z' => 'ascii'
+        );
     }
 
 
@@ -129,5 +142,26 @@ class CheckFilenames extends \Frontend {
         }
 
         return $newFilename;
+    }
+
+
+    /**
+     * Return the slug options
+     *
+     * @return array The slug options
+     */
+    protected static function getSlugOptions()
+    {
+        $slugOptions = array();
+
+        if( $validChars = \Config::get('filenameValidCharacters') ) {
+            $slugOptions['validChars'] = $validChars;
+        }
+
+        if( $locale = \Config::get('filenameValidCharactersLocale') ) {
+            $slugOptions['locale'] = $locale;
+        }
+
+        return $slugOptions;
     }
 }
