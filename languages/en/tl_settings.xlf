@@ -16,6 +16,18 @@
         <source>By default all renamed files with be trimmed to 32 characters.</source>
         <target>By default all renamed files with be trimmed to 32 characters.</target>
     </trans-unit>
+    <trans-unit id="tl_settings.filenameValidCharacters.0">
+        <source>Valid filename characters</source>
+    </trans-unit>
+    <trans-unit id="tl_settings.filenameValidCharacters.1">
+        <source>Here you can select a custom character set for automatically renamed files.</source>
+    </trans-unit>
+    <trans-unit id="tl_settings.filenameValidCharactersLocale.0">
+        <source>Conversion locale</source>
+    </trans-unit>
+    <trans-unit id="tl_settings.filenameValidCharactersLocale.1">
+        <source>Here you can define a specific locale for the automatically renamed files. For example, selecting German will convert 'ö' to 'oe' instead of 'o'.</source>
+    </trans-unit>
 </body>
 </file>
 </xliff>
