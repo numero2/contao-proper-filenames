@@ -3,12 +3,11 @@
     "type": "contao-module",
     "license": "LGPL-3.0-or-later",
     "authors": [{
-            "name": "numero2 - Agentur für Internetdienstleistungen",
+            "name": "numero2 - Agentur für digitales Marketing GbR",
             "homepage": "http://www.numero2.de"
         }
     ],
     "require": {
-        "contao/core-bundle": "4.*",
         "contao-community-alliance/composer-plugin": "3.*",
         "ausi/slug-generator": "1.*"
     },

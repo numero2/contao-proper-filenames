@@ -3,25 +3,29 @@
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2017 Leo Feyer
+ * Copyright (c) 2005-2020 Leo Feyer
  *
  * @package   ProperFilenames
  * @author    Benny Born <benny.born@numero2.de>
  * @license   LGPL
- * @copyright 2017 numero2 - Agentur für Internetdienstleistungen
+ * @copyright 2020 numero2 - Agentur für digitales Marketing GbR
  */
 
 use Contao\System;
 use numero2\ProperFilenames\CheckFilenames;
 
+
 /**
  * Add palettes to tl_settings
  */
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['__selector__'][] = 'checkFilenames';
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = str_replace(
     ',imageHeight',
-    ',imageHeight,checkFilenames,doNotTrimFilenames,filenameValidCharacters,filenameValidCharactersLocale',
+    ',imageHeight,checkFilenames',
     $GLOBALS['TL_DCA']['tl_settings']['palettes']['default']
 );
+
+$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['checkFilenames'] = 'filenameValidCharacters,filenameValidCharactersLocale,doNotTrimFilenames';
 
 
 /**
@@ -30,14 +34,8 @@ $GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = str_replace(
 $GLOBALS['TL_DCA']['tl_settings']['fields']['checkFilenames'] = array(
     'label'     => &$GLOBALS['TL_LANG']['tl_settings']['checkFilenames'],
     'inputType' => 'checkbox',
-    'eval'      => array( 'tl_class' => 'w50 cbx' ),
+    'eval'      => array( 'submitOnChange'=>true, 'tl_class' => 'w50 cbx' ),
     'default'   => true
-);
-
-$GLOBALS['TL_DCA']['tl_settings']['fields']['doNotTrimFilenames'] = array(
-    'label'     => &$GLOBALS['TL_LANG']['tl_settings']['doNotTrimFilenames'],
-    'inputType' => 'checkbox',
-    'eval'      => array( 'tl_class' => 'w50 cbx' ),
 );
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['filenameValidCharacters'] = array(
@@ -55,4 +53,10 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['filenameValidCharactersLocale'] = a
         return System::getLanguages();
     },
     'eval'      => array( 'tl_class' => 'w50', 'includeBlankOption' => true, 'chosen' => true ),
+);
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['doNotTrimFilenames'] = array(
+    'label'     => &$GLOBALS['TL_LANG']['tl_settings']['doNotTrimFilenames'],
+    'inputType' => 'checkbox',
+    'eval'      => array( 'tl_class' => 'w50 cbx' ),
 );
