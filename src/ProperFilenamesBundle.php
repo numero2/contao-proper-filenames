@@ -12,7 +12,14 @@
  */
 
 
+namespace numero2\ProperFilenamesBundle;
+
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+
+
 /**
- * Hooks
+ * Configures the Marketing Suite bundle.
  */
-$GLOBALS['TL_HOOKS']['postUpload'][] = array( '\numero2\ProperFilenames\CheckFilenames', 'renameFiles' );
+class ProperFilenamesBundle extends Bundle {
+
+}

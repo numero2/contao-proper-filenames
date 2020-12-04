@@ -15,7 +15,10 @@
 namespace numero2\ProperFilenames;
 
 use Ausi\SlugGenerator\SlugGenerator;
+use Contao\Config;
 use Contao\CoreBundle\Slug\ValidCharacters;
+use Contao\FilesModel;
+use Contao\Message;
 use Contao\System;
 
 
@@ -31,7 +34,7 @@ class CheckFilenames extends \Frontend {
      */
     public function renameFiles( $arrFiles ) {
 
-        if( !\Config::get('checkFilenames') )
+        if( !Config::get('checkFilenames') )
             return null;
 
         $this->Import( 'Files' );
@@ -56,14 +59,14 @@ class CheckFilenames extends \Frontend {
                     $this->Files->rename( $newFile.'.tmp', $newFile );
 
                     // rename file in database
-                    $objFile = \FilesModel::findByPath($file);
+                    $objFile = FilesModel::findByPath($file);
                     $objFile->path = $newFile;
                     $objFile->hash = md5_file(TL_ROOT . '/' . $newFile);
                     $objFile->name = $newFileName;
 
                     if( $objFile->save() ) {
 
-                        \Message::addInfo(sprintf(
+                        Message::addInfo(sprintf(
                             $GLOBALS['TL_LANG']['MSC']['proper_filenames_renamed']
                         ,   $oldFileName
                         ,   $newFileName
@@ -84,7 +87,7 @@ class CheckFilenames extends \Frontend {
      */
     public static function sanitizeFileOrFolderName( $strName ) {
 
-        if( !\Config::get('checkFilenames') )
+        if( !Config::get('checkFilenames') )
             return $strName;
 
         $newName = $strName;
@@ -96,7 +99,7 @@ class CheckFilenames extends \Frontend {
         $newName = self::replaceUnderscores($newName);
 
         // cut name to length
-        if( !\Config::get('doNotTrimFilenames') ) {
+        if( !Config::get('doNotTrimFilenames') ) {
             $newName = substr( $newName, 0, 32 );
         }
 
@@ -148,15 +151,15 @@ class CheckFilenames extends \Frontend {
      *
      * @return array The slug options
      */
-    protected static function getSlugOptions()
-    {
+    protected static function getSlugOptions() {
+
         $slugOptions = array();
 
-        if( $validChars = \Config::get('filenameValidCharacters') ) {
+        if( $validChars = Config::get('filenameValidCharacters') ) {
             $slugOptions['validChars'] = $validChars;
         }
 
-        if( $locale = \Config::get('filenameValidCharactersLocale') ) {
+        if( $locale = Config::get('filenameValidCharactersLocale') ) {
             $slugOptions['locale'] = $locale;
         }
 

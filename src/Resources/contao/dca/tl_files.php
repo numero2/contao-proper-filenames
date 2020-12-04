@@ -15,4 +15,4 @@
 /**
  * Add fields to tl_files
  */
-$GLOBALS['TL_DCA']['tl_files']['fields']['name']['save_callback'][] = array('\numero2\ProperFilenames\CheckFilenames','sanitizeFileOrFolderName');
+$GLOBALS['TL_DCA']['tl_files']['fields']['name']['save_callback'][] = ['\numero2\ProperFilenames\CheckFilenames', 'sanitizeFileOrFolderName'];
