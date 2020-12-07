@@ -7,6 +7,7 @@
  *
  * @package   ProperFilenames
  * @author    Benny Born <benny.born@numero2.de>
+ * @author    Michael Bösherz <michael.boesherz@numero2.de>
  * @license   LGPL
  * @copyright 2020 numero2 - Agentur für digitales Marketing GbR
  */
@@ -37,17 +38,17 @@ class CheckFilenames extends \Frontend {
         if( !Config::get('checkFilenames') )
             return null;
 
-        $this->Import( 'Files' );
-        $this->Import( 'FilesModel' );
+        $this->Import('Files');
+        $this->Import('FilesModel');
 
         if( !empty($arrFiles) ) {
 
             foreach( $arrFiles as $file ) {
 
-                $info = pathinfo( $file );
+                $info = pathinfo($file);
 
-                $oldFileName = $info['filename'] . '.' . strtolower( $info['extension'] );
-                $newFileName = self::sanitizeFileOrFolderName($info['filename']) . '.' . strtolower( $info['extension'] );
+                $oldFileName = $info['filename'] . '.' . strtolower($info['extension']);
+                $newFileName = self::sanitizeFileOrFolderName($info['filename']) . '.' . strtolower($info['extension']);
 
                 // rename physical file
                 if( $oldFileName !== $newFileName ) {
@@ -55,8 +56,8 @@ class CheckFilenames extends \Frontend {
                     $newFile = $info['dirname'] . '/' . $newFileName;
 
                     // create a temp file because the \Files class can't handle proper renaming on windows
-                    $this->Files->rename( $file, $newFile.'.tmp' );
-                    $this->Files->rename( $newFile.'.tmp', $newFile );
+                    $this->Files->rename($file, $newFile.'.tmp');
+                    $this->Files->rename($newFile.'.tmp', $newFile);
 
                     // rename file in database
                     $objFile = FilesModel::findByPath($file);

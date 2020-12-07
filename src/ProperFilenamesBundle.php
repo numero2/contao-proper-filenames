@@ -7,6 +7,7 @@
  *
  * @package   ProperFilenames
  * @author    Benny Born <benny.born@numero2.de>
+ * @author    Michael Bösherz <michael.boesherz@numero2.de>
  * @license   LGPL
  * @copyright 2020 numero2 - Agentur für digitales Marketing GbR
  */
@@ -18,7 +19,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 
 /**
- * Configures the Marketing Suite bundle.
+ * Configures the Proper Filenames bundle.
  */
 class ProperFilenamesBundle extends Bundle {
 
