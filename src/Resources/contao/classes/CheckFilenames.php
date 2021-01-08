@@ -164,6 +164,8 @@ class CheckFilenames extends \Frontend {
             $slugOptions['locale'] = $locale;
         }
 
+        $slugOptions['validChars'] .= '_';
+
         return $slugOptions;
     }
 }
