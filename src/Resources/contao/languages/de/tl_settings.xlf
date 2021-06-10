@@ -34,6 +34,14 @@
         <source>Here you can define a specific locale for the automatically renamed files. For example, selecting German will convert 'ö' to 'oe' instead of 'o'.</source>
         <target>Hier kann eine spezifische Lokalisierung für die automatische umbenannten Dateien ausgewählt werden. Wenn z. B. Deutsch ausgewählt ist, wird 'ö' zu 'oe' statt 'o' umgewandelt.</target>
     </trans-unit>
+    <trans-unit id="tl_settings.excludeFileExtensions.0">
+        <source>Exclude files by extensions</source>
+        <target>Ignoriere Datei nach Dateiendung</target>
+    </trans-unit>
+    <trans-unit id="tl_settings.excludeFileExtensions.1">
+        <source>Here you can define a comma seperated list of file extensions that won't be renamed.</source>
+        <target>Hier kann eine Komma separierte Liste an Dateiendungen angegebn werden, die nicht automatisch umbenannt werden.</target>
+    </trans-unit>
 </body>
 </file>
 </xliff>

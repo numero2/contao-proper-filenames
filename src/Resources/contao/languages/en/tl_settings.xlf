@@ -26,6 +26,12 @@
     <trans-unit id="tl_settings.filenameValidCharactersLocale.1">
         <source>Here you can define a specific locale for the automatically renamed files. For example, selecting German will convert 'ö' to 'oe' instead of 'o'.</source>
     </trans-unit>
+    <trans-unit id="tl_settings.excludeFileExtensions.0">
+        <source>Exclude files by extensions</source>
+    </trans-unit>
+    <trans-unit id="tl_settings.excludeFileExtensions.1">
+        <source>Here you can define a comma seperated list of file extensions that won't be renamed.</source>
+    </trans-unit>
 </body>
 </file>
 </xliff>

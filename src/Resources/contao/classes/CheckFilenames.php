@@ -18,6 +18,7 @@ namespace numero2\ProperFilenames;
 use Ausi\SlugGenerator\SlugGenerator;
 use Contao\Config;
 use Contao\CoreBundle\Slug\ValidCharacters;
+use Contao\DataContainer;
 use Contao\FilesModel;
 use Contao\Message;
 use Contao\System;
@@ -35,8 +36,9 @@ class CheckFilenames extends \Frontend {
      */
     public function renameFiles( $arrFiles ) {
 
-        if( !Config::get('checkFilenames') )
+        if( !Config::get('checkFilenames') ) {
             return null;
+        }
 
         $this->Import('Files');
         $this->Import('FilesModel');
@@ -48,7 +50,7 @@ class CheckFilenames extends \Frontend {
                 $info = pathinfo($file);
 
                 $oldFileName = $info['filename'] . '.' . strtolower($info['extension']);
-                $newFileName = self::sanitizeFileOrFolderName($info['filename']) . '.' . strtolower($info['extension']);
+                $newFileName = self::sanitizeFileOrFolderName($info['filename'], $info) . '.' . strtolower($info['extension']);
 
                 // rename physical file
                 if( $oldFileName !== $newFileName ) {
@@ -82,14 +84,20 @@ class CheckFilenames extends \Frontend {
     /**
      * Sanitizes the given file- or foldername
      *
-     * @param  string $strName
+     * @param string $strName
+     * @param Contao\DataContainer|array $dc
      *
      * @return string
      */
-    public static function sanitizeFileOrFolderName( $strName ) {
+    public static function sanitizeFileOrFolderName( $strName, $dc=null ) {
 
-        if( !Config::get('checkFilenames') )
+        if( !Config::get('checkFilenames') ) {
             return $strName;
+        }
+
+        if( self::skipSanitize($strName, $dc) ) {
+            return $strName;
+        }
 
         $newName = $strName;
 
@@ -148,6 +156,30 @@ class CheckFilenames extends \Frontend {
 
 
     /**
+     * check if the given file should not be sanitized
+     *
+     * @param string $name
+     * @param Contao\DataContainer|array $dc
+     *
+     * @return bool
+     */
+    protected static function skipSanitize( $name, $dc ) {
+
+        // check if file should be ignored by its extension
+        // new upload
+        if( is_array($dc) && !empty($dc['extension']) && in_array($dc['extension'], explode(',', Config::get('excludeFileExtensions'))) ) {
+            return true;
+        }
+
+        // rename in BE
+        if( $dc instanceof DataContainer && !empty($dc->activeRecord->extension) && in_array($dc->activeRecord->extension, explode(',', Config::get('excludeFileExtensions'))) ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Return the slug options
      *
      * @return array The slug options
@@ -167,5 +199,27 @@ class CheckFilenames extends \Frontend {
         $slugOptions['validChars'] .= '_';
 
         return $slugOptions;
+    }
+
+
+    /**
+     * load and set the default value for the exclude file extension setting
+     *
+     * @param string $varValue
+     * @param Contao\DataContainer $dc
+     *
+     * @return string
+     */
+    public static function loadDefaultFileExtenstions( $varValue, DataContainer $dc ) {
+
+        $configValue = Config::get('excludeFileExtensions');
+
+        if( $configValue === null ) {
+            Config::persist('excludeFileExtensions', 'js,css,scss,less,html,htm,ttf,ttc,otf,eot,woff,woff2');
+            Config::set('excludeFileExtensions', 'js,css,scss,less,html,htm,ttf,ttc,otf,eot,woff,woff2');
+            $varValue = 'js,css,scss,less,html,htm,ttf,ttc,otf,eot,woff,woff2';
+        }
+
+        return $varValue;
     }
 }

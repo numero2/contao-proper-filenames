@@ -26,7 +26,7 @@ $GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = str_replace(
 ,   $GLOBALS['TL_DCA']['tl_settings']['palettes']['default']
 );
 
-$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['checkFilenames'] = 'filenameValidCharacters,filenameValidCharactersLocale,doNotTrimFilenames';
+$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['checkFilenames'] = 'filenameValidCharacters,filenameValidCharactersLocale,excludeFileExtensions,doNotTrimFilenames';
 
 
 /**
@@ -35,7 +35,7 @@ $GLOBALS['TL_DCA']['tl_settings']['subpalettes']['checkFilenames'] = 'filenameVa
 $GLOBALS['TL_DCA']['tl_settings']['fields']['checkFilenames'] = [
     'label'                 => &$GLOBALS['TL_LANG']['tl_settings']['checkFilenames']
 ,   'inputType'             => 'checkbox'
-,   'eval'                  => ['submitOnChange'=>true, 'tl_class' => 'w50 cbx']
+,   'eval'                  => ['submitOnChange'=>true, 'tl_class'=>'w50 cbx']
 ,   'default'               => true
 ];
 
@@ -44,20 +44,27 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['filenameValidCharacters'] = [
 ,   'inputType'             => 'select'
 ,   'options_callback'      => [CheckFilenames::class, 'getValidCharacterOptions']
 ,   'reference'             => &$GLOBALS['TL_LANG']['MSC']['validCharacters']
-,   'eval'                  => ['tl_class' => 'w50', 'includeBlankOption' => true, 'decodeEntities' => true]
+,   'eval'                  => ['mandatory'=>true, 'includeBlankOption'=>true, 'decodeEntities'=>true, 'tl_class'=>'w50']
 ];
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['filenameValidCharactersLocale'] = [
     'label'                 => &$GLOBALS['TL_LANG']['tl_settings']['filenameValidCharactersLocale']
 ,   'inputType'             => 'select'
-,   'options_callback'      => static function () {
+,   'options_callback'      => static function() {
         return System::getLanguages();
     }
-,   'eval'                  => ['tl_class' => 'w50', 'includeBlankOption' => true, 'chosen' => true]
+,   'eval'                  => ['includeBlankOption'=>true, 'chosen'=>true, 'tl_class'=>'w50']
+];
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['excludeFileExtensions'] = [
+    'label'                 => &$GLOBALS['TL_LANG']['tl_settings']['excludeFileExtensions']
+,   'inputType'             => 'text'
+,   'load_callback'         => [['\numero2\ProperFilenames\CheckFilenames', 'loadDefaultFileExtenstions']]
+,   'eval'                  => ['useRawRequestData'=>true, 'tl_class'=>'clr long']
 ];
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['doNotTrimFilenames'] = [
     'label'                 => &$GLOBALS['TL_LANG']['tl_settings']['doNotTrimFilenames']
 ,   'inputType'             => 'checkbox'
-,   'eval'                  => ['tl_class' => 'w50 cbx']
+,   'eval'                  => ['tl_class'=>'w50 cbx']
 ];
