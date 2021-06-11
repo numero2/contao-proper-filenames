@@ -7,12 +7,20 @@
  *
  * @package   ProperFilenames
  * @author    Benny Born <benny.born@numero2.de>
+ * @author    Michael Bösherz <michael.boesherz@numero2.de>
  * @license   LGPL
  * @copyright 2020 numero2 - Agentur für digitales Marketing GbR
  */
 
 
+namespace numero2\ProperFilenamesBundle;
+
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+
+
 /**
- * Hooks
+ * Configures the Proper Filenames bundle.
  */
-$GLOBALS['TL_HOOKS']['postUpload'][] = array( '\numero2\ProperFilenames\CheckFilenames', 'renameFiles' );
+class ProperFilenamesBundle extends Bundle {
+
+}

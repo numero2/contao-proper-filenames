@@ -1,6 +1,6 @@
-<?xml version="1.0" ?>
+<?xml version="1.0"?>
 <xliff version="1.1">
-<file datatype="php" original="system/modules/proper-filenames/languages/en/tl_settings.php" source-language="en">
+<file datatype="php" original="src/Resources/contao/languages/en/tl_settings.php" source-language="en">
 <body>
     <trans-unit id="tl_settings.checkFilenames.0">
         <source>Check filenames</source>
@@ -10,11 +10,9 @@
     </trans-unit>
     <trans-unit id="tl_settings.doNotTrimFilenames.0">
         <source>Do not trim filenames</source>
-        <target>Do not trim filenames</target>
     </trans-unit>
     <trans-unit id="tl_settings.doNotTrimFilenames.1">
         <source>By default all renamed files with be trimmed to 32 characters.</source>
-        <target>By default all renamed files with be trimmed to 32 characters.</target>
     </trans-unit>
     <trans-unit id="tl_settings.filenameValidCharacters.0">
         <source>Valid filename characters</source>
@@ -27,6 +25,12 @@
     </trans-unit>
     <trans-unit id="tl_settings.filenameValidCharactersLocale.1">
         <source>Here you can define a specific locale for the automatically renamed files. For example, selecting German will convert 'ö' to 'oe' instead of 'o'.</source>
+    </trans-unit>
+    <trans-unit id="tl_settings.excludeFileExtensions.0">
+        <source>Exclude files by extensions</source>
+    </trans-unit>
+    <trans-unit id="tl_settings.excludeFileExtensions.1">
+        <source>Here you can define a comma seperated list of file extensions that won't be renamed.</source>
     </trans-unit>
 </body>
 </file>

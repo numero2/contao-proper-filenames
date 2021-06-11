@@ -10,7 +10,6 @@ Santizes the filenames of files uploaded via the Contao File manager.
 System requirements
 --
 
-* [Contao](https://github.com/contao/core) 3.5
 * [Contao](https://github.com/contao/contao) 4.4 or newer
 
 
