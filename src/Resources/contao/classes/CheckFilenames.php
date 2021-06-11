@@ -3,13 +3,13 @@
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2020 Leo Feyer
+ * Copyright (c) 2005-2021 Leo Feyer
  *
  * @package   ProperFilenames
  * @author    Benny Born <benny.born@numero2.de>
  * @author    Michael Bösherz <michael.boesherz@numero2.de>
  * @license   LGPL
- * @copyright 2020 numero2 - Agentur für digitales Marketing GbR
+ * @copyright 2021 numero2 - Agentur für digitales Marketing GbR
  */
 
 
@@ -178,13 +178,13 @@ class CheckFilenames extends \Frontend {
         }
 
         if( !empty($aParentFolders) ) {
-            $donotSanitize = Database::getInstance()->prepare("
+            $doNotSanitize = Database::getInstance()->prepare("
                 SELECT count(1) AS count
                 FROM tl_files
-                WHERE type=? AND donotSanitize=? AND path IN ('".implode("','", $aParentFolders)."')
+                WHERE type=? AND doNotSanitize=? AND path IN ('".implode("','", $aParentFolders)."')
             ")->execute('folder', '1');
 
-            if( $donotSanitize->count ) {
+            if( $doNotSanitize->count ) {
                 return true;
             }
         }

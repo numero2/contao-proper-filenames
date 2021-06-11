@@ -37,10 +37,10 @@ class Files extends Backend {
 
         $projectDir = System::getContainer()->getParameter('kernel.project_dir');
 
-        // Remove the donotSanitize field when editing folders
+        // Remove the doNotSanitize field when editing folders
         if( !is_dir($projectDir . '/' . $dc->id) ) {
             PaletteManipulator::create()
-                ->removeField('donotSanitize')
+                ->removeField('doNotSanitize')
                 ->applyToPalette('default', $dc->table)
             ;
         }
