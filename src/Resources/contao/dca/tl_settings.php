@@ -13,7 +13,6 @@
  */
 
 use Contao\System;
-use numero2\ProperFilenames\CheckFilenames;
 
 
 /**
@@ -36,13 +35,12 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['checkFilenames'] = [
     'label'                 => &$GLOBALS['TL_LANG']['tl_settings']['checkFilenames']
 ,   'inputType'             => 'checkbox'
 ,   'eval'                  => ['submitOnChange'=>true, 'tl_class'=>'w50 cbx']
-,   'default'               => true
 ];
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['filenameValidCharacters'] = [
     'label'                 => &$GLOBALS['TL_LANG']['tl_settings']['filenameValidCharacters']
 ,   'inputType'             => 'select'
-,   'options_callback'      => [CheckFilenames::class, 'getValidCharacterOptions']
+,   'options_callback'      => ['numero2\ProperFilenames\DCAHelper\Settings', 'getValidCharacterOptions']
 ,   'reference'             => &$GLOBALS['TL_LANG']['MSC']['validCharacters']
 ,   'eval'                  => ['mandatory'=>true, 'includeBlankOption'=>true, 'decodeEntities'=>true, 'tl_class'=>'w50']
 ];
@@ -59,7 +57,7 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['filenameValidCharactersLocale'] = [
 $GLOBALS['TL_DCA']['tl_settings']['fields']['excludeFileExtensions'] = [
     'label'                 => &$GLOBALS['TL_LANG']['tl_settings']['excludeFileExtensions']
 ,   'inputType'             => 'text'
-,   'load_callback'         => [['\numero2\ProperFilenames\CheckFilenames', 'loadDefaultFileExtenstions']]
+,   'load_callback'         => [['numero2\ProperFilenames\DCAHelper\Settings', 'loadDefaultFileExtenstions']]
 ,   'eval'                  => ['useRawRequestData'=>true, 'tl_class'=>'clr long']
 ];
 

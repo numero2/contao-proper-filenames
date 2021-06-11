@@ -17,7 +17,7 @@ namespace numero2\ProperFilenames;
 
 use Ausi\SlugGenerator\SlugGenerator;
 use Contao\Config;
-use Contao\CoreBundle\Slug\ValidCharacters;
+use Contao\Database;
 use Contao\DataContainer;
 use Contao\FilesModel;
 use Contao\Message;
@@ -40,8 +40,7 @@ class CheckFilenames extends \Frontend {
             return null;
         }
 
-        $this->Import('Files');
-        $this->Import('FilesModel');
+        $this->import('Files');
 
         if( !empty($arrFiles) ) {
 
@@ -117,26 +116,6 @@ class CheckFilenames extends \Frontend {
 
 
     /**
-     * Provides the options for tl_settings.filenameValidCharacters
-     *
-     * @return array
-     */
-    public function getValidCharacterOptions() {
-
-        if( class_exists(ValidCharacters::class) ) {
-            return System::getContainer()->get('contao.slug.valid_characters')->getOptions();
-        }
-
-        return array(
-            '\pN\p{Ll}' => 'unicodeLowercase',
-            '\pN\pL' => 'unicode',
-            '0-9a-z' => 'asciiLowercase',
-            '0-9a-zA-Z' => 'ascii'
-        );
-    }
-
-
-    /**
      * Replaces doubled underscores in the given filename
      *
      * @param string $strFile
@@ -176,8 +155,43 @@ class CheckFilenames extends \Frontend {
             return true;
         }
 
+        // check if a parent folder is set to not sanitize
+        $aParentFolders = [];
+        $aParts = [];
+
+        // new upload
+        if( is_array($dc) && !empty($dc['dirname']) ) {
+            $aParts = explode('/', $dc['dirname']);
+        }
+        // rename in BE
+        if( $dc instanceof DataContainer && is_string($dc->id) ) {
+            $aParts = explode('/', $dc->id);
+        }
+
+        if( !empty($aParts) ) {
+            $path = '';
+            foreach( $aParts as $folder ) {
+                $path .= $folder;
+                $aParentFolders[] = $path;
+                $path .= '/';
+            }
+        }
+
+        if( !empty($aParentFolders) ) {
+            $donotSanitize = Database::getInstance()->prepare("
+                SELECT count(1) AS count
+                FROM tl_files
+                WHERE type=? AND donotSanitize=? AND path IN ('".implode("','", $aParentFolders)."')
+            ")->execute('folder', '1');
+
+            if( $donotSanitize->count ) {
+                return true;
+            }
+        }
+
         return false;
     }
+
 
     /**
      * Return the slug options
@@ -199,27 +213,5 @@ class CheckFilenames extends \Frontend {
         $slugOptions['validChars'] .= '_';
 
         return $slugOptions;
-    }
-
-
-    /**
-     * load and set the default value for the exclude file extension setting
-     *
-     * @param string $varValue
-     * @param Contao\DataContainer $dc
-     *
-     * @return string
-     */
-    public static function loadDefaultFileExtenstions( $varValue, DataContainer $dc ) {
-
-        $configValue = Config::get('excludeFileExtensions');
-
-        if( $configValue === null ) {
-            Config::persist('excludeFileExtensions', 'js,css,scss,less,html,htm,ttf,ttc,otf,eot,woff,woff2');
-            Config::set('excludeFileExtensions', 'js,css,scss,less,html,htm,ttf,ttc,otf,eot,woff,woff2');
-            $varValue = 'js,css,scss,less,html,htm,ttf,ttc,otf,eot,woff,woff2';
-        }
-
-        return $varValue;
     }
 }

@@ -14,6 +14,29 @@
 
 
 /**
+ * Add config to tl_files
+ */
+$GLOBALS['TL_DCA']['tl_files']['config']['onload_callback'][] = ['\numero2\ProperFilenames\DCAHelper\Files', 'adjustPalettes'];
+
+
+/**
+ * Add palettes to tl_files
+ */
+$GLOBALS['TL_DCA']['tl_files']['palettes']['default'] = str_replace(
+    ',syncExclude'
+,   ',syncExclude,donotSanitize'
+,   $GLOBALS['TL_DCA']['tl_files']['palettes']['default']
+);
+
+
+/**
  * Add fields to tl_files
  */
 $GLOBALS['TL_DCA']['tl_files']['fields']['name']['save_callback'][] = ['\numero2\ProperFilenames\CheckFilenames', 'sanitizeFileOrFolderName'];
+
+$GLOBALS['TL_DCA']['tl_files']['fields']['donotSanitize'] = [
+    'label'                 => &$GLOBALS['TL_LANG']['tl_files']['donotSanitize']
+,   'inputType'             => 'checkbox'
+,   'eval'                  => ['tl_class'=>'w50 cbx']
+,   'sql'                   => "char(1) NOT NULL default ''"
+];
