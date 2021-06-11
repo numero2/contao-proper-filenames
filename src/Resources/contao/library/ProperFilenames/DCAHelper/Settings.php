@@ -16,12 +16,34 @@
 namespace numero2\ProperFilenames\DCAHelper;
 
 use Contao\Backend;
+use Contao\Config;
+use Contao\CoreBundle\Slug\ValidCharacters;
 use Contao\DataContainer;
 use Contao\System;
 use CoreBundle\DataContainer\PaletteManipulator;
 
 
 class Settings extends Backend {
+
+
+    /**
+     * Provides the options for tl_settings.filenameValidCharacters
+     *
+     * @return array
+     */
+    public function getValidCharacterOptions() {
+
+        if( class_exists(ValidCharacters::class) ) {
+            return System::getContainer()->get('contao.slug.valid_characters')->getOptions();
+        }
+
+        return [
+            '\pN\p{Ll}' => 'unicodeLowercase',
+            '\pN\pL' => 'unicode',
+            '0-9a-z' => 'asciiLowercase',
+            '0-9a-zA-Z' => 'ascii'
+        ];
+    }
 
 
     /**
