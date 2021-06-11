@@ -157,7 +157,7 @@ class CheckFilenames extends \Frontend {
         }
 
         // check if a parent folder is set to not sanitize
-        $objDc = new stdClass();
+        $objDc = new \stdClass();
 
         // new upload
         if( is_array($dc) && !empty($dc['dirname']) ) {
@@ -168,7 +168,7 @@ class CheckFilenames extends \Frontend {
             $objDc->id = $dc->id;
         }
 
-        if( $dc->id ) {
+        if( $objDc->id ) {
             if( Files::checkParentFolder('', $objDc) ) {
                 return true;
             }

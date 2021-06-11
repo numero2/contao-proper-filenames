@@ -75,6 +75,7 @@ class Files extends Backend {
         }
 
         if( !empty($aParentFolders) ) {
+
             $doNotSanitize = Database::getInstance()->prepare("
                 SELECT count(1) AS count
                 FROM tl_files
@@ -83,7 +84,7 @@ class Files extends Backend {
 
             if( $doNotSanitize->count ) {
 
-                if( !empty($dc->table) && !empty($dc->field) ) {
+                if( $dc->table && $dc->field ) {
                     $GLOBALS['TL_DCA'][$dc->table]['fields'][$dc->field]['eval']['disabled'] = true;
                 }
 
