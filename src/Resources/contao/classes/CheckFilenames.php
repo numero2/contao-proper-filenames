@@ -22,6 +22,7 @@ use Contao\DataContainer;
 use Contao\FilesModel;
 use Contao\Message;
 use Contao\System;
+use numero2\ProperFilenames\DCAHelper\Files;
 
 
 class CheckFilenames extends \Frontend {
@@ -156,35 +157,19 @@ class CheckFilenames extends \Frontend {
         }
 
         // check if a parent folder is set to not sanitize
-        $aParentFolders = [];
-        $aParts = [];
+        $objDc = new stdClass();
 
         // new upload
         if( is_array($dc) && !empty($dc['dirname']) ) {
-            $aParts = explode('/', $dc['dirname']);
+            $objDc->id = $dc['dirname'];
         }
         // rename in BE
         if( $dc instanceof DataContainer && is_string($dc->id) ) {
-            $aParts = explode('/', $dc->id);
+            $objDc->id = $dc->id;
         }
 
-        if( !empty($aParts) ) {
-            $path = '';
-            foreach( $aParts as $folder ) {
-                $path .= $folder;
-                $aParentFolders[] = $path;
-                $path .= '/';
-            }
-        }
-
-        if( !empty($aParentFolders) ) {
-            $doNotSanitize = Database::getInstance()->prepare("
-                SELECT count(1) AS count
-                FROM tl_files
-                WHERE type=? AND doNotSanitize=? AND path IN ('".implode("','", $aParentFolders)."')
-            ")->execute('folder', '1');
-
-            if( $doNotSanitize->count ) {
+        if( $dc->id ) {
+            if( Files::checkParentFolder('', $objDc) ) {
                 return true;
             }
         }

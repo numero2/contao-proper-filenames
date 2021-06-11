@@ -16,6 +16,7 @@
 namespace numero2\ProperFilenames\DCAHelper;
 
 use Contao\Backend;
+use Contao\Database;
 use Contao\DataContainer;
 use Contao\System;
 use CoreBundle\DataContainer\PaletteManipulator;
@@ -44,5 +45,52 @@ class Files extends Backend {
                 ->applyToPalette('default', $dc->table)
             ;
         }
+    }
+
+
+    /**
+     * check if a parent folder has set do not sanitize
+     *
+     * @param string $varValue
+     * @param Contao\DataContainer $dc
+     *
+     * @return string
+     */
+    public static function checkParentFolder( $varValue, $dc ) {
+
+        $aParentFolders = [];
+
+        if( !$varValue && $dc->id ) {
+
+            $aParts = explode('/', $dc->id);
+
+            if( !empty($aParts) ) {
+                $path = '';
+                foreach( $aParts as $folder ) {
+                    $path .= $folder;
+                    $aParentFolders[] = $path;
+                    $path .= '/';
+                }
+            }
+        }
+
+        if( !empty($aParentFolders) ) {
+            $doNotSanitize = Database::getInstance()->prepare("
+                SELECT count(1) AS count
+                FROM tl_files
+                WHERE type=? AND doNotSanitize=? AND path IN ('".implode("','", $aParentFolders)."')
+            ")->execute('folder', '1');
+
+            if( $doNotSanitize->count ) {
+
+                if( !empty($dc->table) && !empty($dc->field) ) {
+                    $GLOBALS['TL_DCA'][$dc->table]['fields'][$dc->field]['eval']['disabled'] = true;
+                }
+
+                return '1';
+            }
+        }
+
+        return $varValue;
     }
 }
