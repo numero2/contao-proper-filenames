@@ -84,8 +84,11 @@ class Files extends Backend {
 
             if( $doNotSanitize->count ) {
 
-                if( $dc->table && $dc->field ) {
-                    $GLOBALS['TL_DCA'][$dc->table]['fields'][$dc->field]['eval']['disabled'] = true;
+                try {
+                    if( $dc->table && $dc->field ) {
+                        $GLOBALS['TL_DCA'][$dc->table]['fields'][$dc->field]['eval']['disabled'] = true;
+                    }
+                } catch( \Exception $e ) {
                 }
 
                 return '1';
