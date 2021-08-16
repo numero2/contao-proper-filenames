@@ -21,6 +21,7 @@ use Contao\Database;
 use Contao\DataContainer;
 use Contao\FilesModel;
 use Contao\Message;
+use Contao\StringUtil;
 use Contao\System;
 use numero2\ProperFilenames\DCAHelper\Files;
 
@@ -33,12 +34,14 @@ class CheckFilenames extends \Frontend {
      *
      * @param array $arrFiles
      *
-     * @return none
+     * @return array
      */
     public function renameFiles( $arrFiles ) {
 
+        $aRenamed = [];
+
         if( !Config::get('checkFilenames') ) {
-            return null;
+            return $aRenamed;
         }
 
         $this->import('Files');
@@ -56,6 +59,7 @@ class CheckFilenames extends \Frontend {
                 if( $oldFileName !== $newFileName ) {
 
                     $newFile = $info['dirname'] . '/' . $newFileName;
+                    $aRenamed[$file] = $newFile;
 
                     // create a temp file because the \Files class can't handle proper renaming on windows
                     $this->Files->rename($file, $newFile.'.tmp');
@@ -67,7 +71,7 @@ class CheckFilenames extends \Frontend {
                     $objFile->hash = md5_file(TL_ROOT . '/' . $newFile);
                     $objFile->name = $newFileName;
 
-                    if( $objFile->save() ) {
+                    if( $objFile->save() && TL_MODE === 'BE' ) {
 
                         Message::addInfo(sprintf(
                             $GLOBALS['TL_LANG']['MSC']['proper_filenames_renamed']
@@ -78,6 +82,41 @@ class CheckFilenames extends \Frontend {
                 }
             }
         }
+
+        return $aRenamed;
+    }
+
+
+    /**
+     * Rename an uploaded file
+     *
+     * @param Contao\Widget $objWidget
+     * @param string $formId
+     * @param array $arrData
+     * @param Contao\Form $objForm
+     *
+     * @return Contao\Widget
+     */
+    public function renameFormUploads( $objWidget, $formId, $arrData, $objForm ) {
+
+        if( $objWidget->storeFile && !empty($_SESSION['FILES'][$objWidget->name]) ) {
+
+            $tempPath = StringUtil::stripRootDir($_SESSION['FILES'][$objWidget->name]['tmp_name']);
+
+            // rename file and change entry in dbafs
+            $aRenamed = $this->renameFiles([$tempPath]);
+
+            if( array_key_exists($tempPath, $aRenamed) ) {
+
+                $newPath = $aRenamed[$tempPath];
+
+                // change session
+                $_SESSION['FILES'][$objWidget->name]['name'] = basename($newPath);
+                $_SESSION['FILES'][$objWidget->name]['tmp_name'] = $newPath;
+            }
+        }
+
+        return $objWidget;
     }
 
 
