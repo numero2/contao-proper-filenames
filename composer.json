@@ -1,6 +1,7 @@
 {
     "name": "numero2/contao-proper-filenames",
     "type": "contao-module",
+    "description": "Replaces special characters in filenames right after upload",
     "license": "LGPL-3.0-or-later",
     "authors": [{
             "name": "numero2 - Agentur für digitales Marketing GbR",
