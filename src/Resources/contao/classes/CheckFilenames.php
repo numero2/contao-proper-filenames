@@ -99,9 +99,16 @@ class CheckFilenames extends \Frontend {
      */
     public function renameFormUploads( $objWidget, $formId, $arrData, $objForm ) {
 
-        if( $objWidget->storeFile && !empty($_SESSION['FILES'][$objWidget->name]) ) {
+        if( $objWidget->storeFile && !empty($_SESSION['FILES'][$objWidget->name]) && !$objWidget->doNotSanitize ) {
 
-            $tempPath = StringUtil::stripRootDir($_SESSION['FILES'][$objWidget->name]['tmp_name']);
+            // the tmp_name could be outside of the Contao root dir (see #10)
+            try {
+
+                $tempPath = StringUtil::stripRootDir($_SESSION['FILES'][$objWidget->name]['tmp_name']);
+
+            } catch( \InvalidArgumentException $e ) {
+                return $objWidget;
+            }
 
             // rename file and change entry in dbafs
             $aRenamed = $this->renameFiles([$tempPath]);
