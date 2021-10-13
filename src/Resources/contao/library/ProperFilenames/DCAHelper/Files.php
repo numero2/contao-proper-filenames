@@ -16,11 +16,10 @@
 namespace numero2\ProperFilenames\DCAHelper;
 
 use Contao\Backend;
-use Contao\Database;
+use Contao\CoreBundle\DataContainer\PaletteManipulator;
 use Contao\DataContainer;
 use Contao\System;
-use CoreBundle\DataContainer\PaletteManipulator;
-
+use Doctrine\DBAL\Connection;
 
 class Files extends Backend {
 
@@ -75,14 +74,16 @@ class Files extends Backend {
         }
 
         if( !empty($aParentFolders) ) {
+            /** @var \Doctrine\DBAL\Connection $db */
+            $db = System::getContainer()->get('database_connection');
 
-            $doNotSanitize = Database::getInstance()->prepare("
+            $doNotSanitize = (int) $db->fetchOne("
                 SELECT count(1) AS count
                 FROM tl_files
-                WHERE type=? AND doNotSanitize=? AND path IN ('".implode("','", $aParentFolders)."')
-            ")->execute('folder', '1');
+                WHERE type='folder' AND doNotSanitize='1' AND path IN (?)
+            ", [$aParentFolders], [Connection::PARAM_STR_ARRAY]);
 
-            if( $doNotSanitize->count ) {
+            if( $doNotSanitize > 0 ) {
 
                 try {
                     if( $dc->table && $dc->field ) {
