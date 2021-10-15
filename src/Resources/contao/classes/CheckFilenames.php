@@ -119,7 +119,7 @@ class CheckFilenames extends \Frontend {
 
                 // change session
                 $_SESSION['FILES'][$objWidget->name]['name'] = basename($newPath);
-                $_SESSION['FILES'][$objWidget->name]['tmp_name'] = $newPath;
+                $_SESSION['FILES'][$objWidget->name]['tmp_name'] = TL_ROOT . '/' .$newPath;
             }
         }
 
