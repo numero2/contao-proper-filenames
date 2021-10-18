@@ -33,10 +33,11 @@ class CheckFilenames extends \Frontend {
      * Renames the given files
      *
      * @param array $arrFiles
+     * @param bool $addSuffix
      *
      * @return array
      */
-    public function renameFiles( $arrFiles ) {
+    public function renameFiles( $arrFiles, $addSuffix=false ) {
 
         $aRenamed = [];
 
@@ -59,6 +60,31 @@ class CheckFilenames extends \Frontend {
                 if( $oldFileName !== $newFileName ) {
 
                     $newFile = $info['dirname'] . '/' . $newFileName;
+
+                    // add numerical suffix to prevent overwriting of already existing files with the same name
+                    if( $addSuffix && file_exists(TL_ROOT . '/' . $newFile) ) {
+
+                        $newInfo = pathinfo($newFile);
+
+                        $offset = 1;
+
+                        $arrAll = scan(TL_ROOT . '/' . $info['dirname']);
+                        $arrExistingFiles = preg_grep('/^' . preg_quote($newInfo['filename'], '/') . '.*\.' . preg_quote($info['extension'], '/') . '/', $arrAll);
+
+                        foreach( $arrExistingFiles as $strFile ) {
+
+                            if( preg_match('/__[0-9]+\.' . preg_quote($info['extension'], '/') . '$/', $strFile) ) {
+
+                                $strFile = str_replace('.' . $info['extension'], '', $strFile);
+                                $intValue = (int) substr($strFile, (strrpos($strFile, '_') + 1));
+
+                                $offset = max($offset, $intValue);
+                            }
+                        }
+
+                        $newFile = str_replace($newInfo['filename'], $newInfo['filename'] . '__' . ++$offset, $newFile);
+                    }
+
                     $aRenamed[$file] = $newFile;
 
                     // create a temp file because the \Files class can't handle proper renaming on windows
@@ -111,7 +137,7 @@ class CheckFilenames extends \Frontend {
             }
 
             // rename file and change entry in dbafs
-            $aRenamed = $this->renameFiles([$tempPath]);
+            $aRenamed = $this->renameFiles([$tempPath], $objWidget->doNotOverwrite);
 
             if( array_key_exists($tempPath, $aRenamed) ) {
 
