@@ -20,6 +20,7 @@ use Contao\Config;
 use Contao\Database;
 use Contao\DataContainer;
 use Contao\FilesModel;
+use Contao\Input;
 use Contao\Message;
 use Contao\StringUtil;
 use Contao\System;
@@ -123,29 +124,16 @@ class CheckFilenames extends \Frontend {
      *
      * @return Contao\Widget
      */
-    public function renameFormUploads( $objWidget, $formId, $arrData, $objForm ) {
+    public function renameFormUploads( $objWidget, $formId, $formData, $form ) {
 
-        if( $objWidget->storeFile && !empty($_SESSION['FILES'][$objWidget->name]) && !$objWidget->doNotSanitize ) {
+        if( Input::post('FORM_SUBMIT') == $formId ) {
 
-            // the tmp_name could be outside of the Contao root dir (see #10)
-            try {
+            if( $objWidget->storeFile && !empty($_FILES[$objWidget->name]) && !$objWidget->doNotSanitize ) {
 
-                $tempPath = StringUtil::stripRootDir($_SESSION['FILES'][$objWidget->name]['tmp_name']);
+                $info = pathinfo($_FILES[$objWidget->name]['name']);
+                $newFileName = self::sanitizeFileOrFolderName($info['filename'], $info) . '.' . strtolower($info['extension']);
 
-            } catch( \InvalidArgumentException $e ) {
-                return $objWidget;
-            }
-
-            // rename file and change entry in dbafs
-            $aRenamed = $this->renameFiles([$tempPath], $objWidget->doNotOverwrite);
-
-            if( array_key_exists($tempPath, $aRenamed) ) {
-
-                $newPath = $aRenamed[$tempPath];
-
-                // change session
-                $_SESSION['FILES'][$objWidget->name]['name'] = basename($newPath);
-                $_SESSION['FILES'][$objWidget->name]['tmp_name'] = $newPath;
+                $_FILES[$objWidget->name]['name'] = $newFileName;
             }
         }
 

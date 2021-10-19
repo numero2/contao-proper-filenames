@@ -17,4 +17,4 @@
  * Hooks
  */
 $GLOBALS['TL_HOOKS']['postUpload'][] = ['\numero2\ProperFilenames\CheckFilenames', 'renameFiles'];
-$GLOBALS['TL_HOOKS']['validateFormField'][] = ['\numero2\ProperFilenames\CheckFilenames', 'renameFormUploads'];
+$GLOBALS['TL_HOOKS']['loadFormField'][] = ['\numero2\ProperFilenames\CheckFilenames', 'renameFormUploads'];
