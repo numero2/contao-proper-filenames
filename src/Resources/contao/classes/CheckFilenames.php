@@ -128,7 +128,7 @@ class CheckFilenames extends \Frontend {
 
         if( Input::post('FORM_SUBMIT') == $formId ) {
 
-            if( $objWidget->storeFile && !empty($_FILES[$objWidget->name]) && !$objWidget->doNotSanitize ) {
+            if( $objWidget->storeFile && !empty($_FILES[$objWidget->name]) && $_FILES[$objWidget->name]['error'] === 0 && !$objWidget->doNotSanitize ) {
 
                 $info = pathinfo($_FILES[$objWidget->name]['name']);
                 $newFileName = self::sanitizeFileOrFolderName($info['filename'], $info) . '.' . strtolower($info['extension']);
@@ -136,6 +136,7 @@ class CheckFilenames extends \Frontend {
                 $_FILES[$objWidget->name]['name'] = $newFileName;
             }
         }
+
 
         return $objWidget;
     }
