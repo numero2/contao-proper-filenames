@@ -5,7 +5,7 @@ Contao Proper Filenames
 
 About
 --
-Sanitizes the filenames of files uploaded via the Contao File manager. [Read more](https://www.numero2.de/contao/erweiterungen/proper-filenames.html)
+Sanitizes the filenames of files uploaded via the Contao file manager or Contao form. [Read more](https://www.numero2.de/contao/erweiterungen/proper-filenames.html)
 
 System requirements
 --
