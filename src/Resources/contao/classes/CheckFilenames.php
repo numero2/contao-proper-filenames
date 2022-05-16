@@ -19,6 +19,7 @@ use Ausi\SlugGenerator\SlugGenerator;
 use Contao\Config;
 use Contao\Database;
 use Contao\DataContainer;
+use Contao\DC_Folder;
 use Contao\FilesModel;
 use Contao\Input;
 use Contao\Message;
@@ -158,6 +159,26 @@ class CheckFilenames extends \Frontend {
 
         if( self::skipSanitize($strName, $dc) ) {
             return $strName;
+        }
+
+        // allow slashes when creating new folders
+        if( $dc instanceof DC_Folder && $dc->table === "tl_files" && $dc->field === "name" ) {
+
+            $aChunks = array_filter(explode(DIRECTORY_SEPARATOR, $strName));
+
+            // sanitize each chunk
+            if( $dc->value === '__new__' && count($aChunks) > 1 ) {
+
+                $aNewChunks = [];
+
+                foreach( $aChunks as $chunk ) {
+                    $aNewChunks[] = self::sanitizeFileOrFolderName($chunk, $dc);
+                }
+
+                $newName = implode(DIRECTORY_SEPARATOR, $aNewChunks);
+
+                return $newName;
+            }
         }
 
         $newName = $strName;
