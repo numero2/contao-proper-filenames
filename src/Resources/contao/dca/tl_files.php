@@ -36,6 +36,7 @@ $GLOBALS['TL_DCA']['tl_files']['fields']['name']['save_callback'][] = ['\numero2
 
 $GLOBALS['TL_DCA']['tl_files']['fields']['doNotSanitize'] = [
     'label'                 => &$GLOBALS['TL_LANG']['tl_files']['doNotSanitize']
+,   'exclude'               => true
 ,   'inputType'             => 'checkbox'
 ,   'load_callback'         => [['\numero2\ProperFilenames\DCAHelper\Files', 'checkParentFolder']]
 ,   'eval'                  => ['tl_class'=>'w50 cbx']

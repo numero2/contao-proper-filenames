@@ -19,7 +19,9 @@ use Ausi\SlugGenerator\SlugGenerator;
 use Contao\Config;
 use Contao\Database;
 use Contao\DataContainer;
+use Contao\DC_Folder;
 use Contao\FilesModel;
+use Contao\Input;
 use Contao\Message;
 use Contao\StringUtil;
 use Contao\System;
@@ -33,10 +35,11 @@ class CheckFilenames extends \Frontend {
      * Renames the given files
      *
      * @param array $arrFiles
+     * @param bool $addSuffix
      *
      * @return array
      */
-    public function renameFiles( $arrFiles ) {
+    public function renameFiles( $arrFiles, $addSuffix=false ) {
 
         $aRenamed = [];
 
@@ -59,6 +62,31 @@ class CheckFilenames extends \Frontend {
                 if( $oldFileName !== $newFileName ) {
 
                     $newFile = $info['dirname'] . '/' . $newFileName;
+
+                    // add numerical suffix to prevent overwriting of already existing files with the same name
+                    if( $addSuffix && file_exists(TL_ROOT . '/' . $newFile) ) {
+
+                        $newInfo = pathinfo($newFile);
+
+                        $offset = 1;
+
+                        $arrAll = scan(TL_ROOT . '/' . $info['dirname']);
+                        $arrExistingFiles = preg_grep('/^' . preg_quote($newInfo['filename'], '/') . '.*\.' . preg_quote($info['extension'], '/') . '/', $arrAll);
+
+                        foreach( $arrExistingFiles as $strFile ) {
+
+                            if( preg_match('/__[0-9]+\.' . preg_quote($info['extension'], '/') . '$/', $strFile) ) {
+
+                                $strFile = str_replace('.' . $info['extension'], '', $strFile);
+                                $intValue = (int) substr($strFile, (strrpos($strFile, '_') + 1));
+
+                                $offset = max($offset, $intValue);
+                            }
+                        }
+
+                        $newFile = str_replace($newInfo['filename'], $newInfo['filename'] . '__' . ++$offset, $newFile);
+                    }
+
                     $aRenamed[$file] = $newFile;
 
                     // create a temp file because the \Files class can't handle proper renaming on windows
@@ -97,24 +125,19 @@ class CheckFilenames extends \Frontend {
      *
      * @return Contao\Widget
      */
-    public function renameFormUploads( $objWidget, $formId, $arrData, $objForm ) {
+    public function renameFormUploads( $objWidget, $formId, $formData, $form ) {
 
-        if( $objWidget->storeFile && !empty($_SESSION['FILES'][$objWidget->name]) ) {
+        if( Input::post('FORM_SUBMIT') == $formId ) {
 
-            $tempPath = StringUtil::stripRootDir($_SESSION['FILES'][$objWidget->name]['tmp_name']);
+            if( $objWidget->storeFile && !empty($_FILES[$objWidget->name]) && $_FILES[$objWidget->name]['error'] === 0 && !$objWidget->doNotSanitize ) {
 
-            // rename file and change entry in dbafs
-            $aRenamed = $this->renameFiles([$tempPath]);
+                $info = pathinfo($_FILES[$objWidget->name]['name']);
+                $newFileName = self::sanitizeFileOrFolderName($info['filename'], $info) . '.' . strtolower($info['extension']);
 
-            if( array_key_exists($tempPath, $aRenamed) ) {
-
-                $newPath = $aRenamed[$tempPath];
-
-                // change session
-                $_SESSION['FILES'][$objWidget->name]['name'] = basename($newPath);
-                $_SESSION['FILES'][$objWidget->name]['tmp_name'] = $newPath;
+                $_FILES[$objWidget->name]['name'] = $newFileName;
             }
         }
+
 
         return $objWidget;
     }
@@ -136,6 +159,26 @@ class CheckFilenames extends \Frontend {
 
         if( self::skipSanitize($strName, $dc) ) {
             return $strName;
+        }
+
+        // allow slashes when creating new folders
+        if( $dc instanceof DC_Folder && $dc->table === "tl_files" && $dc->field === "name" ) {
+
+            $aChunks = array_filter(explode(DIRECTORY_SEPARATOR, $strName));
+
+            // sanitize each chunk
+            if( $dc->value === '__new__' && count($aChunks) > 1 ) {
+
+                $aNewChunks = [];
+
+                foreach( $aChunks as $chunk ) {
+                    $aNewChunks[] = self::sanitizeFileOrFolderName($chunk, $dc);
+                }
+
+                $newName = implode(DIRECTORY_SEPARATOR, $aNewChunks);
+
+                return $newName;
+            }
         }
 
         $newName = $strName;
