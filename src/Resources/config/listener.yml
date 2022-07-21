@@ -1,1 +1,13 @@
 services:
+
+    numero2.proper_filenames.listener.data_container.files:
+        class: numero2\ProperFilenamesBundle\EventListener\DataContainer\FilesListener
+
+    numero2.proper_filenames.listener.data_container.settings:
+        class: numero2\ProperFilenamesBundle\EventListener\DataContainer\SettingsListener
+
+    numero2.proper_filenames.listener.hooks.check_filenames:
+        class: numero2\ProperFilenamesBundle\EventListener\Hooks\CheckFilenamesListener
+        arguments:
+            - '@request_stack'
+            - '@contao.routing.scope_matcher'

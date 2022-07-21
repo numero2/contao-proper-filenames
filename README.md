@@ -10,7 +10,7 @@ Sanitizes the filenames of files uploaded via the Contao file manager or Contao 
 System requirements
 --
 
-* [Contao](https://github.com/contao/contao) 4.4 or newer
+* [Contao 4.9 or newer](https://github.com/contao/contao)
 
 
 Installation & Configuration
