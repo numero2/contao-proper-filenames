@@ -60,11 +60,11 @@ class FilesListener {
      * @param string $varValue
      * @param Contao\DataContainer $dc
      *
-     * @return string
+     * @return string|null
      *
      * @Callback(table="tl_files", target="fields.doNotSanitize.load")
      */
-    public static function checkParentFolder( $varValue, $dc ): string {
+    public static function checkParentFolder( $varValue, $dc ): ?string {
 
         $aParentFolders = [];
 
