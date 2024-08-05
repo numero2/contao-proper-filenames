@@ -3,13 +3,13 @@
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2022 Leo Feyer
+ * Copyright (c) 2005-2024 Leo Feyer
  *
  * @package   ProperFilenames
  * @author    Benny Born <benny.born@numero2.de>
  * @author    Michael Bösherz <michael.boesherz@numero2.de>
  * @license   LGPL
- * @copyright 2022 numero2 - Agentur für digitales Marketing GbR
+ * @copyright 2024 numero2 - Agentur für digitales Marketing GbR
  */
 
 
@@ -27,19 +27,40 @@ use Contao\System;
 use Contao\Widget;
 use numero2\ProperFilenamesBundle\Util\FilenamesUtil;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 
 class CheckFilenamesListener {
 
 
+    /**
+     * @var Symfony\Component\HttpFoundation\RequestStack
+     */
     private $requestStack;
+
+    /**
+     * @var Symfony\Component\Routing\RouterInterface
+     */
+    private $router;
+
+    /**
+     * @var Contao\CoreBundle\Routing\ScopeMatcher;
+     */
     private $scopeMatcher;
 
+    /**
+     * @var Symfony\Contracts\Translation\TranslatorInterface
+     */
+    private TranslatorInterface $translator;
 
-    public function __construct( RequestStack $requestStack, ScopeMatcher $scopeMatcher ) {
+
+    public function __construct( RequestStack $requestStack, RouterInterface $router, ScopeMatcher $scopeMatcher, TranslatorInterface $translator ) {
 
         $this->requestStack = $requestStack;
+        $this->router = $router;
         $this->scopeMatcher = $scopeMatcher;
+        $this->translator = $translator;
     }
 
 
@@ -52,7 +73,7 @@ class CheckFilenamesListener {
      *
      * @Hook("postUpload")
      */
-    public function renameFilesBackend( array $arrFiles ): void {
+    public function renameFilesBackend( array &$arrFiles ): void {
 
         $aRenamed = [];
 
@@ -65,7 +86,7 @@ class CheckFilenamesListener {
             $oFiles = null;
             $oFiles = CoreFiles::getInstance();
 
-            foreach( $arrFiles as $file ) {
+            foreach( $arrFiles as $i => $file ) {
 
                 $info = pathinfo($file);
 
@@ -98,6 +119,9 @@ class CheckFilenamesListener {
                         ,   $oldFileName
                         ,   $newFileName
                         ));
+
+                        // write back new filename for use in further hooks
+                        $files[$i] = $newFilePath;
                     }
                 }
             }
@@ -131,5 +155,24 @@ class CheckFilenamesListener {
         }
 
         return $objWidget;
+    }
+
+
+    /**
+     * Checks if the renaming of files is activated but missing settings
+     *
+     * @Hook("getSystemMessages")
+     */
+    public function checkMissingSettings(): string {
+
+        if( !Config::get('checkFilenames') || Config::get('checkFilenames') && Config::get('filenameValidCharacters') ) {
+            return '';
+        }
+
+        $msg = sprintf(
+            $this->translator->trans('ERR.proper_filenames_not_configured', [], 'contao_default')
+        ,   $this->router->generate('contao_backend')
+        );
+        return '<p class="tl_error">'.$msg.'</p>';
     }
 }

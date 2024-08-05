@@ -1,36 +1,36 @@
 <?xml version="1.0"?>
 <xliff version="1.1">
-<file datatype="php" original="src/Resources/contao/languages/en/tl_settings.php" source-language="en">
+<file>
 <body>
     <trans-unit id="tl_settings.checkFilenames.0">
-        <source>Check filenames</source>
+        <target>Check filenames</target>
     </trans-unit>
     <trans-unit id="tl_settings.checkFilenames.1">
-        <source>Checks filenames after uploading and replaces any forbidden special characters</source>
+        <target>Checks filenames after uploading and replaces any forbidden special characters</target>
     </trans-unit>
     <trans-unit id="tl_settings.doNotTrimFilenames.0">
-        <source>Do not trim filenames</source>
+        <target>Do not trim filenames</target>
     </trans-unit>
     <trans-unit id="tl_settings.doNotTrimFilenames.1">
-        <source>By default all renamed files with be trimmed to 32 characters.</source>
+        <target>By default all renamed files with be trimmed to 32 characters.</target>
     </trans-unit>
     <trans-unit id="tl_settings.filenameValidCharacters.0">
-        <source>Valid filename characters</source>
+        <target>Valid filename characters</target>
     </trans-unit>
     <trans-unit id="tl_settings.filenameValidCharacters.1">
-        <source>Here you can select a custom character set for automatically renamed files.</source>
+        <target>Here you can select a custom character set for automatically renamed files.</target>
     </trans-unit>
     <trans-unit id="tl_settings.filenameValidCharactersLocale.0">
-        <source>Conversion locale</source>
+        <target>Conversion locale</target>
     </trans-unit>
     <trans-unit id="tl_settings.filenameValidCharactersLocale.1">
-        <source>Here you can define a specific locale for the automatically renamed files. For example, selecting German will convert 'ö' to 'oe' instead of 'o'.</source>
+        <target>Here you can define a specific locale for the automatically renamed files. For example, selecting German will convert 'ö' to 'oe' instead of 'o'.</target>
     </trans-unit>
     <trans-unit id="tl_settings.excludeFileExtensions.0">
-        <source>Exclude files by extensions</source>
+        <target>Exclude files by extensions</target>
     </trans-unit>
     <trans-unit id="tl_settings.excludeFileExtensions.1">
-        <source>Here you can define a comma seperated list of file extensions that won't be renamed.</source>
+        <target>Here you can define a comma seperated list of file extensions that won't be renamed.</target>
     </trans-unit>
 </body>
 </file>

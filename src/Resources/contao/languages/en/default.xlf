@@ -1,9 +1,12 @@
 <?xml version="1.0"?>
 <xliff version="1.1">
-<file datatype="php" original="src/Resources/contao/languages/en/default.php" source-language="en">
+<file>
 <body>
     <trans-unit id="MSC.proper_filenames_renamed">
-        <source>The file „%s” has been renamed to „%s”</source>
+        <target>The file „%s” has been renamed to „%s”</target>
+    </trans-unit>
+    <trans-unit id="ERR.proper_filenames_not_configured">
+        <target><![CDATA[The checking of file names for special characters has been activated, but no valid characters have been configured yet. <a href="%s?do=settings#sub_checkFilenames">Configure now</a>]]></target>
     </trans-unit>
 </body>
 </file>

@@ -10,4 +10,6 @@ services:
         class: numero2\ProperFilenamesBundle\EventListener\Hooks\CheckFilenamesListener
         arguments:
             - '@request_stack'
+            - '@router'
             - '@contao.routing.scope_matcher'
+            - '@contao.translation.translator'

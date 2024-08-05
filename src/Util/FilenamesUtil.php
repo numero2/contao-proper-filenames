@@ -3,13 +3,13 @@
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2022 Leo Feyer
+ * Copyright (c) 2005-2024 Leo Feyer
  *
  * @package   ProperFilenames
  * @author    Benny Born <benny.born@numero2.de>
  * @author    Michael Bösherz <michael.boesherz@numero2.de>
  * @license   LGPL
- * @copyright 2022 numero2 - Agentur für digitales Marketing GbR
+ * @copyright 2024 numero2 - Agentur für digitales Marketing GbR
  */
 
 
@@ -36,7 +36,7 @@ class FilenamesUtil {
      */
     public static function sanitizeFileOrFolderName( $strName, $dc=null ): string {
 
-        if( !Config::get('checkFilenames') ) {
+        if( !Config::get('checkFilenames') || !Config::get('filenameValidCharacters') ) {
             return $strName;
         }
 

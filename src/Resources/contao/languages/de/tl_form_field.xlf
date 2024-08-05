@@ -1,13 +1,11 @@
 <?xml version="1.0"?>
 <xliff version="1.1">
-<file datatype="php" original="src/Resources/contao/languages/en/tl_form_field.php" source-language="en" target-language="de">
+<file>
 <body>
     <trans-unit id="tl_form_field.doNotSanitize.0">
-        <source>Do not check/rename uploaded files</source>
         <target>Dateinamen nicht prüfen</target>
     </trans-unit>
     <trans-unit id="tl_form_field.doNotSanitize.1">
-        <source>Exclude all uploaded files from being checked / renamed.</source>
         <target>Alle hochgeladenen Dateien von der Prüfung auf Sonderzeichen ausschließen.</target>
     </trans-unit>
 </body>
