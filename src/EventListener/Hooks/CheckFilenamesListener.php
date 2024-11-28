@@ -1,15 +1,12 @@
 <?php
 
 /**
- * Contao Open Source CMS
+ * Proper Filenames Bundle for Contao Open Source CMS
  *
- * Copyright (c) 2005-2024 Leo Feyer
- *
- * @package   ProperFilenames
  * @author    Benny Born <benny.born@numero2.de>
  * @author    Michael Bösherz <michael.boesherz@numero2.de>
  * @license   LGPL
- * @copyright 2024 numero2 - Agentur für digitales Marketing GbR
+ * @copyright Copyright (c) 2024, numero2 - Agentur für digitales Marketing GbR
  */
 
 
@@ -100,9 +97,7 @@ class CheckFilenamesListener {
 
                     $aRenamed[$file] = $newFile;
 
-                    // create a temp file because the \Files class can't handle proper renaming on windows
-                    $oFiles->rename($file, $newFile.'.tmp');
-                    $oFiles->rename($newFile.'.tmp', $newFile);
+                    $oFiles->rename($file, $newFile);
 
                     $rootDir = System::getContainer()->getParameter('kernel.project_dir');
 

@@ -1,0 +1,17 @@
+services:
+    _defaults:
+        autoconfigure: true
+
+    _instanceof:
+        Contao\CoreBundle\Framework\FrameworkAwareInterface:
+            calls:
+                - [setFramework, ['@contao.framework']]
+
+
+    numero2_proper_filenames.command.clean_files:
+        class: numero2\ProperFilenamesBundle\Command\CleanFilesCommand
+        arguments:
+            - '%kernel.project_dir%'
+            - '%contao.upload_path%'
+            - '@filesystem'
+            - '@database_connection'
