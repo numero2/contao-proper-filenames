@@ -111,7 +111,7 @@ class CleanFilesCommand extends Command implements FrameworkAwareInterface {
 
         $this->loadSettings();
 
-        if( empty($this->settings['checkFilenames']) ) {
+        if( empty($this->settings['checkFilenames']) || empty($this->settings['filenameValidCharacters']) ) {
 
             $io->success("Proper filenames is not enabled in settings.");
             return Command::SUCCESS;
@@ -258,13 +258,13 @@ class CleanFilesCommand extends Command implements FrameworkAwareInterface {
                 $newPath = Path::join(dirname($path), $newName);
 
                 $countDirs += 1;
-                $table->addRow([$entry['type'], $path, $newFileName]);
+                $table->addRow([$entry['type'], $path, $newName]);
 
                 if( $this->filesystem->exists(Path::join($this->projectDir, $newPath)) || !$files->rename($path, $newPath) ) {
 
                     $table->render();
 
-                    $io->error('Could not rename directory: "'. $path .'" to "'. $newFileName .'"');
+                    $io->error('Could not rename directory: "'. $path .'" to "'. $newName .'"');
                     return Command::FAILURE;
                 }
 
@@ -290,7 +290,7 @@ class CleanFilesCommand extends Command implements FrameworkAwareInterface {
 
     private function loadSettings(): void {
 
-        $configKeys = ['checkFilenames', 'excludeFileExtensions'];
+        $configKeys = ['checkFilenames','filenameValidCharacters', 'excludeFileExtensions'];
         $settings = [];
 
         foreach( $configKeys as $key ) {
