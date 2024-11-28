@@ -18,8 +18,8 @@ use Contao\CoreBundle\Filesystem\Dbafs\DbafsManager;
 use Contao\CoreBundle\Framework\FrameworkAwareInterface;
 use Contao\CoreBundle\Framework\FrameworkAwareTrait;
 use Contao\Dbafs;
-use Contao\FilesModel;
 use Contao\Files;
+use Contao\FilesModel;
 use Contao\Folder;
 use Doctrine\DBAL\Connection;
 use numero2\ProperFilenamesBundle\Util\FilenamesUtil;
@@ -38,8 +38,8 @@ use Symfony\Component\Finder\Finder;
 
 
 #[AsCommand(
-    name: 'contao:proper-filenames:clean-files',
-    description: 'Clean the file and folder names of the given path inside contao files folder.',
+    name: 'contao:proper-filenames:sanitize',
+    description: 'Sanitizes the file and folder names of the given path inside contao files folder.',
 )]
 class CleanFilesCommand extends Command implements FrameworkAwareInterface {
 
@@ -142,7 +142,6 @@ class CleanFilesCommand extends Command implements FrameworkAwareInterface {
         ,   'max-depth' => $optMaxDepth
         ,   'level' => 0
         ]);
-
 
         $countFiles = 0;
         $countDirs = 0;
@@ -366,7 +365,8 @@ class CleanFilesCommand extends Command implements FrameworkAwareInterface {
         if( $flags['recursive'] ) {
             if( $entry['type'] === 'folder' ) {
 
-                $children = Folder::scan($path);
+                $children = Folder::scan( Path::join($this->projectDir, $path));
+
                 $flags['level'] += 1;
 
                 foreach( $children as $file ) {
