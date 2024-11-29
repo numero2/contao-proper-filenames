@@ -1,15 +1,12 @@
 <?php
 
 /**
- * Contao Open Source CMS
+ * Proper Filenames Bundle for Contao Open Source CMS
  *
- * Copyright (c) 2005-2022 Leo Feyer
- *
- * @package   ProperFilenames
  * @author    Benny Born <benny.born@numero2.de>
  * @author    Michael Bösherz <michael.boesherz@numero2.de>
  * @license   LGPL
- * @copyright 2022 numero2 - Agentur für digitales Marketing GbR
+ * @copyright Copyright (c) 2024, numero2 - Agentur für digitales Marketing GbR
  */
 
 
@@ -20,6 +17,7 @@ use Contao\CoreBundle\ServiceAnnotation\Callback;
 use Contao\DataContainer;
 use Contao\System;
 use Doctrine\DBAL\Connection;
+use Exception;
 use numero2\ProperFilenamesBundle\Util\FilenamesUtil;
 
 
@@ -83,7 +81,7 @@ class FilesListener {
         }
 
         if( !empty($aParentFolders) ) {
-            /** @var \Doctrine\DBAL\Connection $db */
+
             $db = System::getContainer()->get('database_connection');
 
             $doNotSanitize = (int) $db->fetchOne("
@@ -98,7 +96,7 @@ class FilesListener {
                     if( $dc->table && $dc->field ) {
                         $GLOBALS['TL_DCA'][$dc->table]['fields'][$dc->field]['eval']['disabled'] = true;
                     }
-                } catch( \Exception $e ) {
+                } catch( Exception $e ) {
                 }
 
                 return '1';

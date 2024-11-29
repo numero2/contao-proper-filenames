@@ -13,8 +13,6 @@
 namespace numero2\ProperFilenamesBundle\Command;
 
 use Contao\Config;
-use Contao\CoreBundle\Filesystem\Dbafs\ChangeSet\ChangeSet;
-use Contao\CoreBundle\Filesystem\Dbafs\DbafsManager;
 use Contao\CoreBundle\Framework\FrameworkAwareInterface;
 use Contao\CoreBundle\Framework\FrameworkAwareTrait;
 use Contao\Dbafs;
@@ -25,7 +23,6 @@ use Doctrine\DBAL\Connection;
 use numero2\ProperFilenamesBundle\Util\FilenamesUtil;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,7 +31,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
-use Symfony\Component\Finder\Finder;
 
 
 #[AsCommand(
@@ -289,7 +285,7 @@ class CleanFilesCommand extends Command implements FrameworkAwareInterface {
 
     private function loadSettings(): void {
 
-        $configKeys = ['checkFilenames','filenameValidCharacters', 'excludeFileExtensions'];
+        $configKeys = ['checkFilenames', 'filenameValidCharacters', 'excludeFileExtensions'];
         $settings = [];
 
         foreach( $configKeys as $key ) {

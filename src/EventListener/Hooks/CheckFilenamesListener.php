@@ -24,8 +24,8 @@ use Contao\System;
 use Contao\Widget;
 use numero2\ProperFilenamesBundle\Util\FilenamesUtil;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 
 class CheckFilenamesListener {
@@ -34,17 +34,17 @@ class CheckFilenamesListener {
     /**
      * @var Symfony\Component\HttpFoundation\RequestStack
      */
-    private $requestStack;
+    private RequestStack $requestStack;
 
     /**
      * @var Symfony\Component\Routing\RouterInterface
      */
-    private $router;
+    private RouterInterface $router;
 
     /**
-     * @var Contao\CoreBundle\Routing\ScopeMatcher;
+     * @var Contao\CoreBundle\Routing\ScopeMatcher
      */
-    private $scopeMatcher;
+    private ScopeMatcher $scopeMatcher;
 
     /**
      * @var Symfony\Contracts\Translation\TranslatorInterface

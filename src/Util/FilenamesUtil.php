@@ -16,8 +16,8 @@ use Ausi\SlugGenerator\SlugGenerator;
 use Contao\Config;
 use Contao\DataContainer;
 use Contao\DC_Folder;
-use Contao\Files as CoreFiles;
 use numero2\ProperFilenamesBundle\EventListener\DataContainer\FilesListener;
+use stdClass;
 
 
 class FilenamesUtil {
@@ -101,7 +101,7 @@ class FilenamesUtil {
      * Check if the given file should not be sanitized
      *
      * @param string $name
-     * @param Contao\DataContainer|array $dc
+     * @param Contao\DataContainer|array|null $dc
      *
      * @return bool
      */
@@ -119,7 +119,7 @@ class FilenamesUtil {
         }
 
         // check if a parent folder is set to not sanitize
-        $objDc = new \stdClass();
+        $objDc = new stdClass();
 
         // new upload
         if( is_array($dc) && !empty($dc['dirname']) ) {
