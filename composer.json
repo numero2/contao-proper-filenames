@@ -9,6 +9,7 @@
         }
     ],
     "require": {
+        "php": ">=8.0",
         "contao/core-bundle": "^4.13 || ^5.0"
     },
     "require-dev": {
