@@ -30,5 +30,12 @@ Recursively sanitize all files and folders in a given directory
 contao-console contao:proper-filenames:sanitize myfolder -r
 ```
 
+The extension only analyses files that are stored in Contao's DBFS (tl_files). The DBFS should be synchronised
+before the call - either via the Dataimanager in the backend or with the following console call:
+
+```sh
+contao-console contao:filesync
+```
+
 To get a preview of how everything will be renamed there is also a `--dry-run` flag.
 For all available flags and options see the help using `contao-console contao:proper-filenames:sanitize --help`.
