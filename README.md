@@ -31,7 +31,7 @@ contao-console contao:proper-filenames:sanitize myfolder -r
 ```
 
 The extension only analyses files that are stored in Contao's DBFS (tl_files). The DBFS should be synchronised
-before the call - either via the Dataimanager in the backend or with the following console call:
+before the call - either via the File manager in the backend or with the following console call:
 
 ```sh
 contao-console contao:filesync
