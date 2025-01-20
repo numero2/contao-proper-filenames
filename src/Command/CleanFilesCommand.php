@@ -35,7 +35,7 @@ use Symfony\Component\Filesystem\Path;
 
 #[AsCommand(
     name: 'contao:proper-filenames:sanitize',
-    description: 'Sanitizes the file and folder names of the given path inside contao files folder.',
+    description: 'Sanitizes the file and folder names of the given path inside Contao`s files folder.',
 )]
 class CleanFilesCommand extends Command implements FrameworkAwareInterface {
 
@@ -79,18 +79,18 @@ class CleanFilesCommand extends Command implements FrameworkAwareInterface {
     protected function configure(): void {
 
         $this
-            ->addArgument('path', InputArgument::REQUIRED, 'Path for what will be cleaned.')
+            ->addArgument('path', InputArgument::REQUIRED, 'Path for what will be sanitized.')
 
-            ->addOption('folders-only', null, InputOption::VALUE_NONE, 'Only clean folders.')
-            ->addOption('files-only', null, InputOption::VALUE_NONE, 'Only clean files.')
-            ->addOption('recursive', 'r', InputOption::VALUE_NONE, 'Clean path recursively')
+            ->addOption('folders-only', null, InputOption::VALUE_NONE, 'Only sanitize folders.')
+            ->addOption('files-only', null, InputOption::VALUE_NONE, 'Only sanitize files.')
+            ->addOption('recursive', 'r', InputOption::VALUE_NONE, 'Sanitize path recursively')
             ->addOption('max-depth', 'd', InputOption::VALUE_OPTIONAL, 'Only scan folder up to this depth.', -1)
-            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Show current and new name of the file or folder without changeing anything.')
+            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Show current and new name of the file or folder without changing anything.')
 
             ->setHelp(
                 'Be careful this action cannot easily be reversed!'. "\n" .
-                'Files and Folders not synced to contao will not be cleaned!'. "\n" .
-                'This command will respect the settings like "excludeFileExtensions", "doNotTrimFilenames", "doNotSanitize", ... for all files and folders it discovers and clean them accordingly.'
+                'Files and folders not synced to DBAFS will not be sanitized!'. "\n" .
+                'This command will respect the settings like "excludeFileExtensions", "doNotTrimFilenames", "doNotSanitize", ... for all files and folders it discovers and sanitize them accordingly.'
             )
         ;
     }
@@ -153,7 +153,7 @@ class CleanFilesCommand extends Command implements FrameworkAwareInterface {
 
         if( !$optNoInteraction ) {
 
-            $io->section('Cleaning path "' . $filesPath . '"');
+            $io->section('Sanitizing path "' . $filesPath . '"');
 
             $io->writeln(' * Found folders: ' . $countDirs);
             $io->writeln(' * Found files: ' . $countFiles);
@@ -161,7 +161,7 @@ class CleanFilesCommand extends Command implements FrameworkAwareInterface {
 
         if( $countFiles === 0 && $countDirs === 0 ) {
 
-            $io->success("Nothing found for cleaning.");
+            $io->success("Nothing found to sanitize.");
             return Command::SUCCESS;
         }
 
@@ -172,7 +172,7 @@ class CleanFilesCommand extends Command implements FrameworkAwareInterface {
 
         } else {
 
-            if( !$optNoInteraction && !$io->confirm('Execute cleaning files?') ) {
+            if( !$optNoInteraction && !$io->confirm('Execute sanitizing files?') ) {
                 return Command::SUCCESS;
             }
 
@@ -272,11 +272,11 @@ class CleanFilesCommand extends Command implements FrameworkAwareInterface {
             $table->render();
 
             $io->writeln(' Total renames files: '. $countFiles .' | folders: '. $countDirs);
-            $io->success("Cleaning done.");
+            $io->success("Sanitization done.");
 
         } else {
 
-            $io->success("Nothing found for cleaning.");
+            $io->success("Nothing found for sanitize.");
         }
 
         return Command::SUCCESS;

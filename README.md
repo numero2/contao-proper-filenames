@@ -24,14 +24,13 @@ Installation & Configuration
 Commands
 ---
 
-Recursively sanitize all files and folders in a given directory
+Recursively sanitize all files and folders in a given directory.
 
 ```sh
 contao-console contao:proper-filenames:sanitize myfolder -r
 ```
-
-The extension only analyses files that are stored in Contao's DBFS (tl_files). The DBFS should be synchronised
-before the call - either via the File manager in the backend or with the following console call:
+The extension only analyzes files that are stored in Contao's DBAFS (tl_files). The DBAFS should be synchronized
+before the call - either via the `File manager` in the Backend or with the following console call:
 
 ```sh
 contao-console contao:filesync
