@@ -116,7 +116,7 @@ class CheckFilenamesListener {
                         ));
 
                         // write back new filename for use in further hooks
-                        $files[$i] = $newFilePath;
+                        $arrFiles[$i] = $newFile;
                     }
                 }
             }
