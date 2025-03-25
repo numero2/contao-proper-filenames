@@ -99,24 +99,32 @@ class CheckFilenamesListener {
 
                     $oFiles->rename($file, $newFile);
 
-                    $rootDir = System::getContainer()->getParameter('kernel.project_dir');
-
-                    // rename file in database
+                    // get the database entry created by Contao
                     $objFile = FilesModel::findByPath($file);
-                    $objFile->path = $newFile;
-                    $objFile->hash = md5_file($rootDir . '/' . $newFile);
-                    $objFile->name = $newFileName;
 
-                    if( $objFile->save() && $this->scopeMatcher->isBackendRequest($this->requestStack->getCurrentRequest()) ) {
+                    // check if file already exists under the new name
+                    if( FilesModel::findByPath($newFile) ) {
+                        // delete old file in database
+                        $objFile->delete();
+                    } else {
+                        $rootDir = System::getContainer()->getParameter('kernel.project_dir');
 
-                        Message::addInfo(sprintf(
-                            $GLOBALS['TL_LANG']['MSC']['proper_filenames_renamed']
-                        ,   $oldFileName
-                        ,   $newFileName
-                        ));
+                        // rename file in database
+                        $objFile->path = $newFile;
+                        $objFile->hash = md5_file($rootDir . '/' . $newFile);
+                        $objFile->name = $newFileName;
 
-                        // write back new filename for use in further hooks
-                        $files[$i] = $newFilePath;
+                        if( $objFile->save() && $this->scopeMatcher->isBackendRequest($this->requestStack->getCurrentRequest()) ) {
+
+                            Message::addInfo(sprintf(
+                                $GLOBALS['TL_LANG']['MSC']['proper_filenames_renamed']
+                            ,   $oldFileName
+                            ,   $newFileName
+                            ));
+    
+                            // write back new filename for use in further hooks
+                            $files[$i] = $newFilePath;
+                        }
                     }
                 }
             }
