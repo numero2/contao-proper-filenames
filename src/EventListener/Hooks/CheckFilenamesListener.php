@@ -104,9 +104,12 @@ class CheckFilenamesListener {
 
                     // check if file already exists under the new name
                     if( FilesModel::findByPath($newFile) ) {
+                    
                         // delete old file in database
                         $objFile->delete();
+                    
                     } else {
+                        
                         $rootDir = System::getContainer()->getParameter('kernel.project_dir');
 
                         // rename file in database
@@ -123,7 +126,7 @@ class CheckFilenamesListener {
                             ));
     
                             // write back new filename for use in further hooks
-                            $files[$i] = $newFilePath;
+                            $arrFiles[$i] = $newFile;
                         }
                     }
                 }
