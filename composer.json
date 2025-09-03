@@ -10,7 +10,10 @@
     ],
     "require": {
         "php": ">=8.0",
-        "contao/core-bundle": "^4.13 || ^5.0"
+        "contao/core-bundle": "^4.13 || ^5.0",
+        "doctrine/dbal": "^3.6 || ^4.3",
+        "symfony/console": "^5.4 || ^6.4 || ^7.0",
+        "symfony/dependency-injection": "^5.4 || ^6.4 || ^7.0"
     },
     "require-dev": {
         "contao/manager-plugin": "^2.0"

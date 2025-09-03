@@ -6,7 +6,7 @@
  * @author    Benny Born <benny.born@numero2.de>
  * @author    Michael Bösherz <michael.boesherz@numero2.de>
  * @license   LGPL
- * @copyright Copyright (c) 2024, numero2 - Agentur für digitales Marketing GbR
+ * @copyright Copyright (c) 2025, numero2 - Agentur für digitales Marketing GbR
  */
 
 
@@ -16,7 +16,7 @@ use Contao\CoreBundle\DataContainer\PaletteManipulator;
 use Contao\CoreBundle\ServiceAnnotation\Callback;
 use Contao\DataContainer;
 use Contao\System;
-use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ArrayParameterType;
 use Exception;
 use numero2\ProperFilenamesBundle\Util\FilenamesUtil;
 
@@ -88,14 +88,16 @@ class FilesListener {
                 SELECT count(1) AS count
                 FROM tl_files
                 WHERE type='folder' AND doNotSanitize='1' AND path IN (?)
-            ", [$aParentFolders], [Connection::PARAM_STR_ARRAY]);
+            ", [$aParentFolders], [ArrayParameterType::STRING]);
 
             if( $doNotSanitize > 0 ) {
 
                 try {
+
                     if( $dc->table && $dc->field ) {
                         $GLOBALS['TL_DCA'][$dc->table]['fields'][$dc->field]['eval']['disabled'] = true;
                     }
+
                 } catch( Exception $e ) {
                 }
 
