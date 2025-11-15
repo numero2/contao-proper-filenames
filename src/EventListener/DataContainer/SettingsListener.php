@@ -78,9 +78,9 @@ class SettingsListener {
         $configValue = Config::get('excludeFileExtensions');
 
         if( $configValue === null ) {
-            Config::persist('excludeFileExtensions', 'js,css,scss,less,html,htm,ttf,ttc,otf,eot,woff,woff2');
-            Config::set('excludeFileExtensions', 'js,css,scss,less,html,htm,ttf,ttc,otf,eot,woff,woff2');
-            $varValue = 'js,css,scss,less,html,htm,ttf,ttc,otf,eot,woff,woff2';
+            Config::persist('excludeFileExtensions', 'js,css,scss,less,map,html,htm,ttf,ttc,otf,eot,woff,woff2');
+            Config::set('excludeFileExtensions', 'js,css,scss,less,map,html,htm,ttf,ttc,otf,eot,woff,woff2');
+            $varValue = 'js,css,scss,less,map,html,htm,ttf,ttc,otf,eot,woff,woff2';
         }
 
         return $varValue;
