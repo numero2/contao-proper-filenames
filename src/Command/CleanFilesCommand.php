@@ -6,7 +6,7 @@
  * @author    Benny Born <benny.born@numero2.de>
  * @author    Michael Bösherz <michael.boesherz@numero2.de>
  * @license   LGPL
- * @copyright Copyright (c) 2024, numero2 - Agentur für digitales Marketing GbR
+ * @copyright Copyright (c) 2026, numero2 - Agentur für digitales Marketing GbR
  */
 
 
@@ -189,6 +189,10 @@ class CleanFilesCommand extends Command implements FrameworkAwareInterface {
         $table = new Table($output);
         $table->setHeaders(['Type', 'Old path', 'New name']);
 
+        $hasError = false;
+        $tableErrors = new Table($output);
+        $tableErrors->setHeaders(['Type', 'Old path', 'New name', 'Message']);
+
         foreach( $pathsToRename as $path => $entry ) {
 
             $fullPath = Path::join($this->projectDir, $path);
@@ -224,16 +228,15 @@ class CleanFilesCommand extends Command implements FrameworkAwareInterface {
 
                         $newPath = Path::join(dirname($path), $newFileName);
 
-                        $countFiles += 1;
-                        $table->addRow([$entry['type'], $path, $newFileName]);
-
                         if( $this->filesystem->exists(Path::join($this->projectDir, $newPath)) || !$files->rename($path, $newPath) ) {
 
-                            $table->render();
-
-                            $io->error('Could not rename file: "'. $path .'" to "'. $newFileName .'"');
-                            return Command::FAILURE;
+                            $hasError = true;
+                            $tableErrors->addRow([$entry['type'], $path, $newFileName, 'New name already exist.']);
+                            continue;
                         }
+
+                        $countFiles += 1;
+                        $table->addRow([$entry['type'], $path, $newFileName]);
 
                         Dbafs::moveResource($path, $newPath);
 
@@ -252,16 +255,15 @@ class CleanFilesCommand extends Command implements FrameworkAwareInterface {
 
                 $newPath = Path::join(dirname($path), $newName);
 
-                $countDirs += 1;
-                $table->addRow([$entry['type'], $path, $newName]);
-
                 if( $this->filesystem->exists(Path::join($this->projectDir, $newPath)) || !$files->rename($path, $newPath) ) {
 
-                    $table->render();
-
-                    $io->error('Could not rename directory: "'. $path .'" to "'. $newName .'"');
-                    return Command::FAILURE;
+                    $hasError = true;
+                    $table->addRow([$entry['type'], $path, $newName, 'New name already exist.']);
+                    continue;
                 }
+
+                $countDirs += 1;
+                $table->addRow([$entry['type'], $path, $newName]);
 
                 Dbafs::moveResource($path, $newPath);
             }
@@ -272,11 +274,22 @@ class CleanFilesCommand extends Command implements FrameworkAwareInterface {
             $table->render();
 
             $io->writeln(' Total renames files: '. $countFiles .' | folders: '. $countDirs);
-            $io->success("Sanitization done.");
 
-        } else {
+            if( !$hasError ) {
+                $io->success("Sanitization done.");
+            }
+
+        } else if( !$hasError ) {
 
             $io->success("Nothing found for sanitize.");
+        }
+
+        if( $hasError ) {
+
+            $io->error('Errors during Sanitization');
+            $tableErrors->render();
+
+            return Command::FAILURE;
         }
 
         return Command::SUCCESS;
@@ -314,6 +327,13 @@ class CleanFilesCommand extends Command implements FrameworkAwareInterface {
         if( $this->ignorePath($entry, true) ) {
             return [];
         }
+
+        $path = $entry['model']->path ?? null;
+
+        if( $path === null ) {
+            return [];
+        }
+        $paths[$path] = $entry;
 
         // also use folder content
         if( $flags['recursive'] ) {
