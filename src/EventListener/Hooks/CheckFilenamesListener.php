@@ -5,8 +5,8 @@
  *
  * @author    Benny Born <benny.born@numero2.de>
  * @author    Michael Bösherz <michael.boesherz@numero2.de>
- * @license   LGPL
- * @copyright Copyright (c) 2024, numero2 - Agentur für digitales Marketing GbR
+ * @license   LGPL-3.0-or-later
+ * @copyright Copyright (c) 2026, numero2 - Agentur für digitales Marketing GbR
  */
 
 
@@ -104,12 +104,12 @@ class CheckFilenamesListener {
 
                     // check if file already exists under the new name
                     if( FilesModel::findByPath($newFile) ) {
-                    
+
                         // delete old file in database
                         $objFile->delete();
-                    
+
                     } else {
-                        
+
                         $rootDir = System::getContainer()->getParameter('kernel.project_dir');
 
                         // rename file in database
@@ -124,7 +124,7 @@ class CheckFilenamesListener {
                             ,   $oldFileName
                             ,   $newFileName
                             ));
-    
+
                             // write back new filename for use in further hooks
                             $arrFiles[$i] = $newFile;
                         }
@@ -167,6 +167,8 @@ class CheckFilenamesListener {
     /**
      * Checks if the renaming of files is activated but missing settings
      *
+     * @return string
+     *
      * @Hook("getSystemMessages")
      */
     public function checkMissingSettings(): string {
@@ -179,6 +181,7 @@ class CheckFilenamesListener {
             $this->translator->trans('ERR.proper_filenames_not_configured', [], 'contao_default')
         ,   $this->router->generate('contao_backend')
         );
+
         return '<p class="tl_error">'.$msg.'</p>';
     }
 }

@@ -10,11 +10,10 @@
  */
 
 
-namespace numero2\ProperFilenamesBundle;
+use ShipMonk\ComposerDependencyAnalyser\Config\Configuration;
+use ShipMonk\ComposerDependencyAnalyser\Config\ErrorType;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-
-class ProperFilenamesBundle extends Bundle {
-
-}
+return (new Configuration())
+    ->ignoreErrorsOnPackage('contao/manager-plugin', [ErrorType::DEV_DEPENDENCY_IN_PROD])
+;

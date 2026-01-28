@@ -11,12 +11,20 @@
     "require": {
         "php": ">=8.0",
         "contao/core-bundle": "^4.13 || ^5.0",
+        "ausi/slug-generator": "^1.1",
         "doctrine/dbal": "^3.6 || ^4.3",
+        "symfony/config": "^5.4 || ^6.4 || ^7.4",
         "symfony/console": "^5.4 || ^6.4 || ^7.0",
-        "symfony/dependency-injection": "^5.4 || ^6.4 || ^7.0"
+        "symfony/dependency-injection": "^5.4 || ^6.4 || ^7.0",
+        "symfony/filesystem": "^5.4 || ^6.4 || ^7.4",
+        "symfony/http-foundation": "^5.4 || ^6.4 || ^7.4",
+        "symfony/http-kernel": "^5.4 || ^6.4 || ^7.4",
+        "symfony/routing": "^5.4 || ^6.4 || ^7.4",
+        "symfony/translation-contracts": "^2.3 || ^3.0"
     },
     "require-dev": {
-        "contao/manager-plugin": "^2.0"
+        "contao/manager-plugin": "^2.0",
+        "shipmonk/composer-dependency-analyser": "^1.4"
     },
     "conflict": {
         "contao/core": "*",
@@ -38,5 +46,15 @@
             "src/Resources/contao/languages/",
             "src/Resources/contao/templates/"
         ]
+    },
+    "scripts": {
+        "depcheck": "@php vendor/bin/composer-dependency-analyser --config=depcheck.php"
+    },
+    "config": {
+        "allow-plugins": {
+            "contao-components/installer": false,
+            "php-http/discovery": false,
+            "contao/manager-plugin": false
+        }
     }
 }
