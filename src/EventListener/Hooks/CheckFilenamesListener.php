@@ -151,12 +151,39 @@ class CheckFilenamesListener {
 
         if( Input::post('FORM_SUBMIT') == $formId ) {
 
-            if( $objWidget->storeFile && !empty($_FILES[$objWidget->name]) && $_FILES[$objWidget->name]['error'] === 0 && !$objWidget->doNotSanitize ) {
+            $widgetName = $objWidget->name;
 
-                $info = pathinfo($_FILES[$objWidget->name]['name']);
-                $newFileName = FilenamesUtil::sanitizeFileOrFolderName($info['filename'], $info) . '.' . strtolower($info['extension']);
+            if( $objWidget->multipleFiles ) {
+                $widgetName = substr($widgetName,0,-2);
+            }
 
-                $_FILES[$objWidget->name]['name'] = $newFileName;
+            if( $objWidget->storeFile && !empty($_FILES[$widgetName]) && !$objWidget->doNotSanitize ) {
+
+                // multi-upload
+                if( $objWidget->multipleFiles ) {
+
+                    foreach( $_FILES[$widgetName]['name'] as $i => $v ) {
+
+                        if( $_FILES[$widgetName]['error'][$i] === 0 ) {
+
+                            $info = pathinfo($v);
+                            $newFileName = FilenamesUtil::sanitizeFileOrFolderName($info['filename'], $info) . '.' . strtolower($info['extension']);
+
+                            $_FILES[$widgetName]['name'][$i] = $newFileName;
+                        }
+                    }
+
+                // single upload
+                } else {
+
+                    if( $_FILES[$widgetName]['error'] === 0 ) {
+
+                        $info = pathinfo($_FILES[$widgetName]['name']);
+                        $newFileName = FilenamesUtil::sanitizeFileOrFolderName($info['filename'], $info) . '.' . strtolower($info['extension']);
+
+                        $_FILES[$widgetName]['name'] = $newFileName;
+                    }
+                }
             }
         }
 
