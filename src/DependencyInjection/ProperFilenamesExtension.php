@@ -24,11 +24,11 @@ class ProperFilenamesExtension extends Extension {
     /**
      * {@inheritdoc}
      */
-    public function load(array $mergedConfig, ContainerBuilder $container): void {
+    public function load( array $mergedConfig, ContainerBuilder $container ): void {
 
         $loader = new YamlFileLoader(
             $container,
-            new FileLocator(__DIR__.'/../Resources/config')
+            new FileLocator(__DIR__.'/../../config')
         );
 
         $loader->load('commands.yml');

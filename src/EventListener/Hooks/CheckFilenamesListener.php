@@ -13,8 +13,8 @@
 namespace numero2\ProperFilenamesBundle\EventListener\Hooks;
 
 use Contao\Config;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\CoreBundle\Routing\ScopeMatcher;
-use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\Files as CoreFiles;
 use Contao\FilesModel;
 use Contao\Form;
@@ -65,11 +65,8 @@ class CheckFilenamesListener {
      * Renames uploaded files (backend)
      *
      * @param array $arrFiles
-     *
-     * @return void
-     *
-     * @Hook("postUpload")
      */
+    #[AsHook('postUpload')]
     public function renameFilesBackend( array &$arrFiles ): void {
 
         $aRenamed = [];
@@ -144,9 +141,8 @@ class CheckFilenamesListener {
      * @param Contao\Form $objForm
      *
      * @return Contao\Widget
-     *
-     * @Hook("loadFormField")
      */
+    #[AsHook('loadFormField')]
     public function renameFileUpload( Widget $objWidget, string $formId, array $formData, Form $form ): Widget {
 
         if( Input::post('FORM_SUBMIT') == $formId ) {
@@ -195,9 +191,8 @@ class CheckFilenamesListener {
      * Checks if the renaming of files is activated but missing settings
      *
      * @return string
-     *
-     * @Hook("getSystemMessages")
      */
+    #[AsHook('getSystemMessages')]
     public function checkMissingSettings(): string {
 
         if( !Config::get('checkFilenames') || Config::get('checkFilenames') && Config::get('filenameValidCharacters') ) {

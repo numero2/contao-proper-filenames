@@ -9,18 +9,17 @@
         }
     ],
     "require": {
-        "php": ">=8.0",
-        "contao/core-bundle": "^4.13 || ^5.0",
+        "contao/core-bundle": "^5.0 || ^6.0",
         "ausi/slug-generator": "^1.1",
-        "doctrine/dbal": "^3.6 || ^4.3",
-        "symfony/config": "^5.4 || ^6.4 || ^7.4",
-        "symfony/console": "^5.4 || ^6.4 || ^7.0",
-        "symfony/dependency-injection": "^5.4 || ^6.4 || ^7.0",
-        "symfony/filesystem": "^5.4 || ^6.4 || ^7.4",
-        "symfony/http-foundation": "^5.4 || ^6.4 || ^7.4",
-        "symfony/http-kernel": "^5.4 || ^6.4 || ^7.4",
-        "symfony/routing": "^5.4 || ^6.4 || ^7.4",
-        "symfony/translation-contracts": "^2.3 || ^3.0"
+        "doctrine/dbal": "^3.7 || ^4.3",
+        "symfony/config": "^6.4 || ^7.4 || ^8.0",
+        "symfony/console": "^6.4 || ^7.4 || ^8.0",
+        "symfony/dependency-injection": "^6.4 || ^7.4 || ^8.0",
+        "symfony/filesystem": "^6.4 || ^7.4 || ^8.0",
+        "symfony/http-foundation": "^6.4 || ^7.4 || ^8.0",
+        "symfony/http-kernel": "^6.4 || ^7.4 || ^8.0",
+        "symfony/routing": "^6.4 || ^7.4 || ^8.0",
+        "symfony/translation-contracts": "^3.0"
     },
     "require-dev": {
         "contao/manager-plugin": "^2.0",
@@ -38,13 +37,13 @@
             "numero2\\ProperFilenamesBundle\\": "src/"
         },
         "classmap": [
-            "src/Resources/contao/"
+            "contao/"
         ],
         "exclude-from-classmap": [
-            "src/Resources/contao/config/",
-            "src/Resources/contao/dca/",
-            "src/Resources/contao/languages/",
-            "src/Resources/contao/templates/"
+            "contao/config/",
+            "contao/dca/",
+            "contao/languages/",
+            "contao/templates/"
         ]
     },
     "scripts": {

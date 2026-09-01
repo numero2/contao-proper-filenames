@@ -14,7 +14,7 @@ namespace numero2\ProperFilenamesBundle\EventListener\DataContainer;
 
 use Contao\Config;
 use Contao\CoreBundle\DataContainer\PaletteManipulator;
-use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\CoreBundle\Slug\ValidCharacters;
 use Contao\DataContainer;
 use Contao\System;
@@ -27,9 +27,8 @@ class SettingsListener {
      * Adjust the palettes
      *
      * @param Contao\DataContainer $dc
-     *
-     * @Callback(table="tl_settings", target="config.onload")
      */
+    #[AsCallback('tl_settings', target: 'config.onload')]
     public function adjustPalettes( DataContainer $dc ): void {
 
         PaletteManipulator::create()
@@ -45,9 +44,8 @@ class SettingsListener {
      * Generate options for valid filename characters
      *
      * @return array
-     *
-     * @Callback(table="tl_settings", target="fields.filenameValidCharacters.options")
      */
+    #[AsCallback('tl_settings', target: 'fields.filenameValidCharacters.options')]
     public function getValidCharacterOptions(): array {
 
         if( class_exists(ValidCharacters::class) ) {
@@ -70,9 +68,8 @@ class SettingsListener {
      * @param Contao\DataContainer $dc
      *
      * @return string
-     *
-     * @Callback(table="tl_settings", target="fields.excludeFileExtensions.load")
      */
+    #[AsCallback('tl_settings', target: 'fields.excludeFileExtensions.load')]
     public static function loadDefaultFileExtenstions( $varValue, DataContainer $dc ): string {
 
         $configValue = Config::get('excludeFileExtensions');
@@ -91,9 +88,8 @@ class SettingsListener {
      * Generate options for languages
      *
      * @return array
-     *
-     * @Callback(table="tl_settings", target="fields.filenameValidCharactersLocale.options")
      */
+    #[AsCallback('tl_settings', target: 'fields.filenameValidCharactersLocale.options')]
     public static function getLanguages(): array {
 
         if( System::getContainer()->has('contao.intl.locales') ) {

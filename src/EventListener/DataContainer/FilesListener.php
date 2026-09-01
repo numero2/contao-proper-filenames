@@ -13,7 +13,7 @@
 namespace numero2\ProperFilenamesBundle\EventListener\DataContainer;
 
 use Contao\CoreBundle\DataContainer\PaletteManipulator;
-use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
 use Contao\System;
 use Doctrine\DBAL\ArrayParameterType;
@@ -28,9 +28,8 @@ class FilesListener {
      * Adjust the palettes
      *
      * @param Contao\DataContainer $dc
-     *
-     * @Callback(table="tl_files", target="config.onload")
      */
+    #[AsCallback('tl_files', target: 'config.onload')]
     public function adjustPalettes( DataContainer $dc ): void {
 
         PaletteManipulator::create()
@@ -59,9 +58,8 @@ class FilesListener {
      * @param Contao\DataContainer $dc
      *
      * @return string|null
-     *
-     * @Callback(table="tl_files", target="fields.doNotSanitize.load")
      */
+    #[AsCallback('tl_files', target: 'fields.doNotSanitize.load')]
     public static function checkParentFolder( $varValue, $dc ): ?string {
 
         $aParentFolders = [];
@@ -116,9 +114,8 @@ class FilesListener {
      * @param Contao\DataContainer|array $dc
      *
      * @return string
-     *
-     * @Callback(table="tl_files", target="fields.name.save")
      */
+    #[AsCallback('tl_files', target: 'fields.name.save')]
     public function sanitizeFileOrFolderName( $strName, $dc=null ): string {
 
         return FilenamesUtil::sanitizeFileOrFolderName($strName, $dc);
